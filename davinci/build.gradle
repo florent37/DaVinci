@@ -1,4 +1,8 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: "com.jfrog.bintray"
+
+version = "1.0.0"
 
 android {
     compileSdkVersion 22
@@ -25,4 +29,86 @@ dependencies {
     compile 'com.google.android.gms:play-services-wearable:6.5.87'
 
     compile 'com.jakewharton:disklrucache:2.0.2'
+}
+
+//https://github.com/danielemaddaluno/gradle-jcenter-publish
+
+
+def siteUrl = 'https://github.com/florent37/DaVinci'      // Homepage URL of the library
+def gitUrl = 'https://github.com/florent37/DaVinci.git'   // Git repository URL
+group = "com.florent37.davinci"                      // Maven Group ID for the artifact
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+
+                // Add your description here
+                name 'DaVinci'
+                description = 'DaVinci is an image downloading and caching library for Android Wear'
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'florent37'
+                        name 'Florent Champigny'
+                        email 'champigny.florent@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = "DaVinci"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        version {
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+            }
+//            mavenCentralSync {
+//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//                user = properties.getProperty("bintray.oss.user") //OSS user token
+//                password = properties.getProperty("bintray.oss.password") //OSS user password
+//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//            }
+        }
+    }
 }
