@@ -2,8 +2,10 @@ package com.florent37.davinci.sample;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.florent37.davincidaemon.DaVinciDaemon;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
@@ -26,7 +28,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class WearService extends WearableListenerService {
+public class WearService extends WearableListenerService implements GoogleApiClient.ConnectionCallbacks {
 
     private final static String TAG = WearService.class.getCanonicalName();
 
@@ -37,6 +39,7 @@ public class WearService extends WearableListenerService {
         super.onCreate();
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
                 .build();
         mApiClient.connect();
     }
@@ -131,30 +134,6 @@ public class WearService extends WearableListenerService {
     }
 
     /**
-     * Récupère une bitmap à partir d'une URL
-     */
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(src).openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            return BitmapFactory.decodeStream(connection.getInputStream());
-        } catch (Exception e) {
-            // Log exception
-            return null;
-        }
-    }
-
-    /**
-     * Les bitmap transferés depuis les DataApi doivent être empaquetées en Asset
-     */
-    public static Asset createAssetFromBitmap(Bitmap bitmap) {
-        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
-        return Asset.createFromBytes(byteStream.toByteArray());
-    }
-
-    /**
      * Permet d'envoyer une liste d'elements
      */
     protected void sendElements(final List<Element> elements) {
@@ -180,32 +159,17 @@ public class WearService extends WearableListenerService {
                 Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
 
             //puis envoie l'image associée
-            sendImage(element.getUrl(), position);
+            DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("image/" + position);
         }
     }
 
-    /**
-     * Permet d'envoyer une image à la montre
-     */
-    protected void sendImage(String url, int position) {
-        //télécharge l'image
-        Bitmap bitmap = getBitmapFromURL(url);
-        if (bitmap != null) {
-            Asset asset = createAssetFromBitmap(bitmap);
-
-            //créé un emplacement mémoire "image/[url_image]"
-            final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/image/" + position);
-
-            //ajoute la date de mise à jour, important pour que les données soient mises à jour
-            putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
-
-            //ajoute l'image à la requête
-            putDataMapRequest.getDataMap().putAsset("image", asset);
-
-            //envoie la donnée à la montre
-            if (mApiClient.isConnected())
-                Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
-        }
+    @Override
+    public void onConnected(Bundle bundle) {
+        DaVinciDaemon.init(getApplicationContext(),mApiClient);
     }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 }
