@@ -74,7 +74,7 @@ DaVinci.with(context).load("/image/" + row).into(new DaVinci.Callback() {
 
 By default, the asset name used for the bitmap is "image", you can modify this 
 ```java
-DaVinci.with(context).load("/image/" + row).setImageAssetName("myImage").into(imageView);
+DaVinci.with(context).load("/image/0").setImageAssetName("myImage").into(imageView);
 ```
 
 Send Bitmaps
