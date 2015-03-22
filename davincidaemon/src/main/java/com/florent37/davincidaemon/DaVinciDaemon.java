@@ -92,12 +92,13 @@ public class DaVinciDaemon {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        Log.d(TAG, "Picasso " + url + " loaded");
                         sentBitmap(bitmap, url, path);
                     }
 
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-
+                        Log.d(TAG, "Picasso " + url + " failed");
                     }
 
                     @Override
@@ -107,9 +108,9 @@ public class DaVinciDaemon {
                 });
     }
 
-    private String generatePath(final String url, final String path){
-        if(path == null)
-            return DEFAULT_PATH+url.hashCode();
+    private String generatePath(final String url, final String path) {
+        if (path == null)
+            return DEFAULT_PATH + url.hashCode();
         else
             return path;
     }
@@ -121,35 +122,38 @@ public class DaVinciDaemon {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    final String finalPath = generatePath(url, path);
 
+                    final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(finalPath);
+
+                    putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
+
+                    putDataMapRequest.getDataMap().putAsset("image", asset);
+
+                    if (mApiClient != null && mApiClient.isConnected())
+                        Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest()).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+                            @Override
+                            public void onResult(DataApi.DataItemResult dataItemResult) {
+                                if (mCallBack != null) {
+                                    if (dataItemResult.getStatus().isSuccess()) {
+                                        Log.d(TAG, url + " send");
+                                        mCallBack.onBitmapSent(url, finalPath);
+                                    } else {
+                                        Log.d(TAG, url + " send error");
+                                        mCallBack.onBitmapError(url, finalPath);
+                                    }
+                                }
+                            }
+                        });
+                    else {
+                        Log.d(TAG, "ApiClient null of not connected");
+
+                        if (mCallBack != null)
+                            mCallBack.onBitmapError(url, path);
+                    }
                 }
             }).start();
 
-            final String finalPath = generatePath(url,path);
-
-            final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(finalPath);
-
-            putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
-
-            putDataMapRequest.getDataMap().putAsset("image", asset);
-
-            if (mApiClient != null && mApiClient.isConnected())
-                Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest()).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                    @Override
-                    public void onResult(DataApi.DataItemResult dataItemResult) {
-                        if (mCallBack != null) {
-                            if (dataItemResult.getStatus().isSuccess()) {
-                                mCallBack.onBitmapSent(url, finalPath);
-                            } else {
-                                mCallBack.onBitmapError(url, finalPath);
-                            }
-                        }
-                    }
-                });
-            else {
-                if (mCallBack != null)
-                    mCallBack.onBitmapError(url, path);
-            }
         } else {
             if (mCallBack != null)
                 mCallBack.onBitmapError(url, path);
@@ -175,11 +179,15 @@ public class DaVinciDaemon {
         if (mUrl == null) {
             Log.d(TAG, "must execute .load(url) before");
         } else {
+            Log.d(TAG, "load "+mUrl);
+
+            final String tmpUrl = mUrl;
+
             //main handler for picasso
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    sendImage(mUrl, path);
+                    sendImage(tmpUrl, path);
                 }
             });
         }

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "22.0.0"
 
     defaultConfig {
-        applicationId "com.tutosandroidfrance.wearsample"
+        applicationId "com.florent37.davinci.sample"
         minSdkVersion 20
         targetSdkVersion 22
         versionCode 1

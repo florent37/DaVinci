@@ -159,7 +159,7 @@ public class WearService extends WearableListenerService implements GoogleApiCli
                 Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
 
             //puis envoie l'image associée
-            DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("image/" + position);
+            DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("/image/" + position);
         }
     }
 
