@@ -30,6 +30,7 @@ dependencies {
 }
 
 //https://github.com/danielemaddaluno/gradle-jcenter-publish
+// ./gradlew install bintrayUpload
 
 
 def siteUrl = 'https://github.com/florent37/DaVinci'      // Homepage URL of the library
