@@ -42,6 +42,12 @@ public void onConnected(Bundle bundle) {
 
 ```
 
+Load old bitmaps cached into disk
+
+```java
+DaVinci.init(this, mApiClient).loadFromDiskCache();
+```
+
 And use it wherever you want 
 
 Into an imageview
@@ -127,7 +133,7 @@ ToDo
 * GoogleApiClient included into DaVinci
 * Smartphone module added to transfer bitmaps
 * Service added into the smartphone module
-* Use URL to display bitmap onto your wear
+* Use URL to display bitmap onto your Wear
 
 License
 --------
