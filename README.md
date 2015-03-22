@@ -8,16 +8,26 @@ Download
 
 Download via Gradle:
 ```groovy
-compile 'com.florent37.davinci:davinci:1.0.0'
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url "http://dl.bintray.com/florent37/maven"
+        }
+    }
+}
 ```
-or Maven:
-```xml
-<dependency>
-  <groupId>com.florent37.davinci</groupId>
-  <artifactId>davinci</artifactId>
-  <version>1.0.0</version>
-</dependency>
+
+In your wear module
+```groovy
+compile 'com.florent37.davinci:davinci:1.0.1@aar'
 ```
+
+In your smartphone module
+```groovy
+compile 'com.florent37.davinci:davincidaemon:1.0.1@aar'
+```
+
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
 
@@ -86,52 +96,22 @@ DaVinci.with(context).load("/image/0").setImageAssetName("myImage").into(imageVi
 Send Bitmaps
 --------
 
-Send bitmaps like descibed in Android Documentation [Android Documentation][android_doc]
-(It will be embeded in the next version of DaVinci)
+In your smartphone service
+```java
+    @Override
+    public void onConnected(Bundle bundle) {
+        DaVinciDaemon.init(getApplicationContext(),mApiClient);
+    }
+```
 
 ```java
-
-protected void sendImage(String url, int position) {
-
-    Bitmap bitmap = getBitmapFromURL(url);
-    if (bitmap != null) {
-        Asset asset = createAssetFromBitmap(bitmap);
-
-        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/image/" + position);
-        putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
-
-        putDataMapRequest.getDataMap().putAsset("image", asset);
-
-        if (mApiClient.isConnected())
-            Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
-    }
-}
-
-public static Bitmap getBitmapFromURL(String src) {
-    try {
-        HttpURLConnection connection = (HttpURLConnection) new URL(src).openConnection();
-        connection.setDoInput(true);
-        connection.connect();
-        return BitmapFactory.decodeStream(connection.getInputStream());
-    } catch (Exception e) {
-        // Log exception
-        return null;
-    }
-}
-
-public static Asset createAssetFromBitmap(Bitmap bitmap) {
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
-    return Asset.createFromBytes(byteStream.toByteArray());
-}
-
+DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").into("/image/0");
 ```
 
 ToDo
 --------
 
 * GoogleApiClient included into DaVinci
-* Smartphone module added to transfer bitmaps
 * Service added into the smartphone module
 * Use URL to display bitmap onto your Wear
 

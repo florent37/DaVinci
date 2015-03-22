@@ -1,4 +1,4 @@
-package com.florent37.davincidaemon;
+package com.florent37.davinci.daemon;
 
 import android.content.Context;
 import android.graphics.Bitmap;
