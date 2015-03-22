@@ -80,7 +80,7 @@ DaVinci.with(context).load("/image/" + row).setImageAssetName("myImage").into(im
 Send Bitmaps
 --------
 
-Send bitmaps like descibed in Android Documentation [android_doc]
+Send bitmaps like descibed in Android Documentation [Android Documentation][android_doc]
 (It will be embeded in the next version of DaVinci)
 
 ```java
