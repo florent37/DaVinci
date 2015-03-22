@@ -2,6 +2,7 @@ package com.florent37.davinci.sample;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
@@ -40,7 +41,18 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
     //le drawable affichée en background pour la ligne [row]
     @Override
     public Drawable getBackgroundForRow(final int row) {
+
+        DaVinci.with(null).load("/image/" + row).into(new DaVinci.Callback() {
+            @Override
+            public void onBitmapLoaded(String path, Bitmap bitmap) {
+
+            }
+        });
+
         return DaVinci.with(null).load("/image/" + row).into(this, row);
+
+
+
     }
 
     @Override

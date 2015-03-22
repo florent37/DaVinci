@@ -88,6 +88,20 @@ public class DaVinci {
     }
 
     /**
+     * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
+     *
+     * @param context         the application context
+     * @param googleApiClient the google api client used by the wear application
+     */
+    public static DaVinci init(Context context, GoogleApiClient googleApiClient) {
+        if (INSTANCE == null)
+            INSTANCE = new DaVinci(context, DEFAULT_SIZE, googleApiClient);
+        if (context != null)
+            INSTANCE.mContext = context;
+        return INSTANCE;
+    }
+
+    /**
      * Initialise DaVinci or retrieve the initialised one
      */
     public static DaVinci with(Context context) {
@@ -98,8 +112,9 @@ public class DaVinci {
         return imageAssetName;
     }
 
-    public void setImageAssetName(String imageAssetName) {
+    public DaVinci setImageAssetName(String imageAssetName) {
         this.imageAssetName = imageAssetName;
+        return this;
     }
 
     /**
@@ -128,7 +143,7 @@ public class DaVinci {
      * Load the bitmap into this callback
      * Starts the treatment
      */
-    public void into(BitmapCacheCallback callback) {
+    public void into(Callback callback) {
         if (callback != null) {
             this.mInto = callback;
             loadImage(this.mPath);
@@ -160,7 +175,7 @@ public class DaVinci {
         if(drawable != null)
             return drawable;
         else{
-            into(new BitmapCacheCallback() {
+            into(new Callback() {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
                     if (adapter != null)
@@ -180,7 +195,7 @@ public class DaVinci {
         if(drawable != null)
             return drawable;
         else{
-            into(new BitmapCacheCallback() {
+            into(new Callback() {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
                     if (adapter != null)
@@ -202,7 +217,7 @@ public class DaVinci {
         };
 
         final TransitionDrawable transitionDrawable = new TransitionDrawable(drawables);
-        into(new BitmapCacheCallback() {
+        into(new Callback() {
             @Override
             public void onBitmapLoaded(String path, Bitmap bitmap) {
                 Log.d(TAG, "callback " + path + " called");
@@ -257,8 +272,8 @@ public class DaVinci {
         if (bitmap != null) { //load directly from cache
             if (mInto instanceof ImageView)
                 ((ImageView) mInto).setImageBitmap(bitmap);
-            else if (mInto instanceof BitmapCacheCallback) {
-                ((BitmapCacheCallback) mInto).onBitmapLoaded(path, bitmap);
+            else if (mInto instanceof Callback) {
+                ((Callback) mInto).onBitmapLoaded(path, bitmap);
             }
             Log.d(TAG, "image" + path + " available in the cache");
         } else {
@@ -290,9 +305,9 @@ public class DaVinci {
                         if (mInto instanceof ImageView) {
                             Log.d(TAG, "return bitmap " + path + " into ImageView");
                             ((ImageView) mInto).setImageBitmap(bitmap);
-                        } else if (mInto instanceof BitmapCacheCallback) {
+                        } else if (mInto instanceof Callback) {
                             Log.d(TAG, "return bitmap " + path + " into Callback");
-                            ((BitmapCacheCallback) mInto).onBitmapLoaded(path, bitmap);
+                            ((Callback) mInto).onBitmapLoaded(path, bitmap);
                         }
                     }
                 }
@@ -386,7 +401,7 @@ public class DaVinci {
         return BitmapFactory.decodeStream(assetInputStream);
     }
 
-    public interface BitmapCacheCallback {
+    public interface Callback {
         public void onBitmapLoaded(String path, Bitmap bitmap);
     }
 
