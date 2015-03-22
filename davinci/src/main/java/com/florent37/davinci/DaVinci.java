@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.wearable.view.GridPagerAdapter;
 import android.util.Log;
 import android.util.LruCache;
@@ -19,7 +20,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataRequest;
@@ -31,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DaVinci {
+public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MessageApi.MessageListener, DataApi.DataListener {
 
     public static final String TAG = DaVinci.class.getCanonicalName();
 
@@ -59,17 +63,24 @@ public class DaVinci {
      *
      * @param context         the application context
      * @param size            the number of entry on the cache
-     * @param googleApiClient the google api client used by the wear application
      */
-    private DaVinci(Context context, int size, GoogleApiClient googleApiClient) {
+    private DaVinci(Context context, int size) {
         this.mImagesCache = new LruCache<>(size);
         this.mSize = size;
 
         int cacheSize = 20 * 1024 * 1024; //20mo of disk cache
         this.mDiskImageCache = new DiskLruImageCache(context, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100);
 
-        this.mApiClient = googleApiClient;
         this.mPlaceHolder = new ColorDrawable(Color.TRANSPARENT);
+
+        mApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        mApiClient.connect();
+        //TODO disconnect when the application close
     }
 
     /**
@@ -77,11 +88,10 @@ public class DaVinci {
      *
      * @param context         the application context
      * @param size            the number of entry on the cache
-     * @param googleApiClient the google api client used by the wear application
      */
-    public static DaVinci init(Context context, int size, GoogleApiClient googleApiClient) {
+    public static DaVinci init(Context context, int size) {
         if (INSTANCE == null)
-            INSTANCE = new DaVinci(context, size, googleApiClient);
+            INSTANCE = new DaVinci(context, size);
         if (context != null)
             INSTANCE.mContext = context;
         return INSTANCE;
@@ -91,11 +101,10 @@ public class DaVinci {
      * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
      *
      * @param context         the application context
-     * @param googleApiClient the google api client used by the wear application
      */
-    public static DaVinci init(Context context, GoogleApiClient googleApiClient) {
+    public static DaVinci init(Context context) {
         if (INSTANCE == null)
-            INSTANCE = new DaVinci(context, DEFAULT_SIZE, googleApiClient);
+            INSTANCE = new DaVinci(context, DEFAULT_SIZE);
         if (context != null)
             INSTANCE.mContext = context;
         return INSTANCE;
@@ -105,7 +114,7 @@ public class DaVinci {
      * Initialise DaVinci or retrieve the initialised one
      */
     public static DaVinci with(Context context) {
-        return init(context, DEFAULT_SIZE, null);
+        return init(context, DEFAULT_SIZE);
     }
 
     public String getImageAssetName() {
@@ -399,6 +408,32 @@ public class DaVinci {
         }
         // decode the stream into a bitmap
         return BitmapFactory.decodeStream(assetInputStream);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.MessageApi.addListener(mApiClient, this);
+        Wearable.DataApi.addListener(mApiClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+
     }
 
     public interface Callback {
