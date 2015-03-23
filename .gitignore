@@ -26,4 +26,4 @@ proguard/
 *.log
 
 # Java Heap Files
-.hprof
+*.hprof
