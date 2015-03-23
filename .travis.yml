@@ -1,9 +1,6 @@
 language: android
-
 android:
   components:
     - build-tools-21.1.2
     - android-19
-
-script:
-./gradlew clean build
+script: ./gradlew clean build
