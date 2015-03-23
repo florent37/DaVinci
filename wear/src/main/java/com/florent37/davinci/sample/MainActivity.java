@@ -139,6 +139,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
+        DaVinci.with(this).onDataChanged(dataEvents);
     }
 
     protected Uri getUriForDataItem(String path) {

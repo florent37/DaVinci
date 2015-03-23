@@ -3,14 +3,19 @@ package com.florent37.davinci.daemon;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.squareup.picasso.Picasso;
@@ -20,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-public class DaVinciDaemon {
+public class DaVinciDaemon implements GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener, DataApi.DataListener, GoogleApiClient.OnConnectionFailedListener {
 
     private final static String TAG = DaVinciDaemon.class.getCanonicalName();
 
@@ -32,22 +37,27 @@ public class DaVinciDaemon {
     private static final String DEFAULT_PATH = "/davinci/";
     private String imageAssetName = "image";
 
+    private final static String MESSAGE_DAVINCI = "/davinci/";
+    private final static String DAVINCI_PATH = "/davinci/";
+
     private static DaVinciDaemon INSTANCE;
 
-    private DaVinciDaemon(Context context, GoogleApiClient apiClient) {
+    private DaVinciDaemon(Context context) {
         this.mContext = context;
-        this.mApiClient = apiClient;
-    }
 
-    public static DaVinciDaemon init(Context context, GoogleApiClient apiClient) {
-        if (INSTANCE == null)
-            INSTANCE = new DaVinciDaemon(context, apiClient);
-        return INSTANCE;
+        mApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        mApiClient.connect();
+        //TODO disconnect when the application close
     }
 
     public static DaVinciDaemon with(Context context) {
         if (INSTANCE == null)
-            INSTANCE = new DaVinciDaemon(context, null);
+            INSTANCE = new DaVinciDaemon(context);
         if (context != null)
             INSTANCE.mContext = context;
         return INSTANCE;
@@ -190,6 +200,45 @@ public class DaVinciDaemon {
                     sendImage(tmpUrl, path);
                 }
             });
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.MessageApi.addListener(mApiClient, this);
+        Wearable.DataApi.addListener(mApiClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        Log.d(TAG,messageEvent.toString());
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+        Log.d(TAG,dataEvents.toString());
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    public void handleMessage(MessageEvent messageEvent) {
+        final String path = messageEvent.getPath();
+
+        if (path.equals(MESSAGE_DAVINCI)) {
+            String message = new String(messageEvent.getData());
+            if (message.startsWith("http") || message.startsWith("www")) {
+                String sendPath = message.hashCode() + "";
+
+                load(message).into(DAVINCI_PATH + sendPath);
+            }
         }
     }
 

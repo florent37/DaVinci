@@ -37,18 +37,7 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public Drawable getBackgroundForRow(final int row) {
-
-        DaVinci.with(null).load("/image/" + row).into(new DaVinci.Callback() {
-            @Override
-            public void onBitmapLoaded(String path, Bitmap bitmap) {
-
-            }
-        });
-
-        return DaVinci.with(null).load("/image/" + row).into(this, row);
-
-
-
+        return DaVinci.with(null).load("http://i.imgur.com/o3ELrbX.jpg").into(this, row);
     }
 
     @Override

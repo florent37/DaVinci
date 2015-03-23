@@ -20,6 +20,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
@@ -32,7 +33,9 @@ import com.google.android.gms.wearable.Wearable;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MessageApi.MessageListener, DataApi.DataListener {
@@ -40,6 +43,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     public static final String TAG = DaVinci.class.getCanonicalName();
 
     private static final int DEFAULT_SIZE = 10;
+    private final static String MESSAGE_DAVINCI = "davinci";
+    private final static String DAVINCI_PATH = "/davinci/";
 
     private String imageAssetName = "image";
 
@@ -48,7 +53,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     private LruCache<Integer, Bitmap> mImagesCache;
     private DiskLruImageCache mDiskImageCache;
 
-    private ArrayList<String> indexes = new ArrayList<>();
+    private ArrayList<String> mIndexes = new ArrayList<>();
+    private Map<String, ArrayList<Object>> mIntoWaiting = new HashMap<>();
 
     private GoogleApiClient mApiClient;
 
@@ -61,8 +67,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     /**
      * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
      *
-     * @param context         the application context
-     * @param size            the number of entry on the cache
+     * @param context the application context
+     * @param size    the number of entry on the cache
      */
     private DaVinci(Context context, int size) {
         this.mImagesCache = new LruCache<>(size);
@@ -86,8 +92,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     /**
      * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
      *
-     * @param context         the application context
-     * @param size            the number of entry on the cache
+     * @param context the application context
+     * @param size    the number of entry on the cache
      */
     public static DaVinci init(Context context, int size) {
         if (INSTANCE == null)
@@ -100,7 +106,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     /**
      * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
      *
-     * @param context         the application context
+     * @param context the application context
      */
     public static DaVinci init(Context context) {
         if (INSTANCE == null)
@@ -129,7 +135,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     /**
      * Prepare bitmap loading
      *
-     * @param path path of the bitmap to load
+     * @param path path of the bitmap to load. Path can be an url
      * @return BitmapCache instance
      */
     public DaVinci load(String path) {
@@ -144,7 +150,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     public void into(ImageView imageView) {
         if (imageView != null) {
             this.mInto = imageView;
-            loadImage(this.mPath);
+            loadImage(this.mPath,mInto);
         }
     }
 
@@ -155,12 +161,12 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     public void into(Callback callback) {
         if (callback != null) {
             this.mInto = callback;
-            loadImage(this.mPath);
+            loadImage(this.mPath,mInto);
         }
     }
 
-    private Drawable returnDrawableIfAvailable(String path){
-        Bitmap bitmap = loadImage(path);
+    private Drawable returnDrawableIfAvailable(String path) {
+        Bitmap bitmap = loadImage(path,mInto);
         if (bitmap != null && mContext != null) {
             final Drawable[] drawables = new Drawable[]{
                     mPlaceHolder,
@@ -181,9 +187,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         mInto = adapter;
 
         Drawable drawable = returnDrawableIfAvailable(mPath);
-        if(drawable != null)
+        if (drawable != null)
             return drawable;
-        else{
+        else {
             into(new Callback() {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
@@ -198,12 +204,12 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     /**
      * Load the bitmap into a GridPagerAdapter at Page [row] / [column]
      */
-    public Drawable into(final GridPagerAdapter adapter,final int row,final int column) {
+    public Drawable into(final GridPagerAdapter adapter, final int row, final int column) {
         mInto = adapter;
         Drawable drawable = returnDrawableIfAvailable(mPath);
-        if(drawable != null)
+        if (drawable != null)
             return drawable;
-        else{
+        else {
             into(new Callback() {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
@@ -253,7 +259,6 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                     Log.d(TAG, "image " + path + " transition started");
                 }
 
-
             }
         });
 
@@ -267,62 +272,120 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             mDiskImageCache.clearCache();
     }
 
-    private Bitmap loadImage(final String path) {
+    private static void loadBitmap(Bitmap bitmap, String path, Object into) {
+        if (into != null && path != null && bitmap != null) {
+            if (into instanceof ImageView) {
+                Log.d(TAG, "return bitmap " + path + " into ImageView");
+                ((ImageView) into).setImageBitmap(bitmap);
+            }
+            else if (into instanceof Callback) {
+                Log.d(TAG, "return bitmap " + path + " into Callback");
+                ((Callback) into).onBitmapLoaded(path, bitmap);
+            }
+        }
+    }
+
+    private Bitmap loadImage(final String path, final Object into) {
         if (mInto == null || mImagesCache == null)
             return null;
 
         Bitmap bitmap = null;
 
-        int indexOfPath = indexes.indexOf(path);
-        if(indexOfPath >= 0)
+        int indexOfPath = mIndexes.indexOf(path);
+        if (indexOfPath >= 0)
             bitmap = mImagesCache.get(indexOfPath);
+
+        //image from url
+        if(bitmap == null) {
+            indexOfPath = mIndexes.indexOf(DAVINCI_PATH+path.hashCode());
+            if (indexOfPath >= 0)
+                bitmap = mImagesCache.get(indexOfPath);
+        }
+
+        Log.d(TAG, "load(" + path +")");
 
         Log.d(TAG, "bitmap from lruCache " + bitmap);
         if (bitmap != null) { //load directly from cache
-            if (mInto instanceof ImageView)
-                ((ImageView) mInto).setImageBitmap(bitmap);
-            else if (mInto instanceof Callback) {
-                ((Callback) mInto).onBitmapLoaded(path, bitmap);
-            }
-            Log.d(TAG, "image" + path + " available in the cache");
+            loadBitmap(bitmap,path,into);
+            Log.d(TAG, "image " + path + " available in the cache");
         } else {
-            Log.d(TAG, "image" + path + " not available in the cache, trying to download it");
-            //download the bitmap
-            new AsyncTask<Void, Void, Bitmap>() {
-                @Override
-                protected Bitmap doInBackground(Void... params) {
-                    Bitmap bitmap = getBitmap(mPath);
-                    Log.d(TAG, "bitmap from bluetooth " + bitmap);
-                    if (bitmap != null && mImagesCache != null) {
-                        Log.d(TAG, "save bitmap " + path + " into cache");
+            Log.d(TAG, "image " + path + " not available in the cache, trying to download it");
 
-                        if(!indexes.contains(path)) {
-                            int index = indexes.size();
-                            indexes.add(path);
+            if (path.startsWith("http") || path.startsWith("www")) {
+                Log.d(TAG,"loadImage "+path+" send request to smartphone");
+                addIntoWaiting(path, into);
+            } else {
+                //download the bitmap from bluetooth
+                new AsyncTask<Void, Void, Bitmap>() {
+                    @Override
+                    protected Bitmap doInBackground(Void... params) {
+                        Bitmap bitmap = getBitmap(path);
+                        Log.d(TAG, "bitmap from bluetooth "+path+ " " + bitmap);
+                        if (bitmap != null && mImagesCache != null) {
+                            Log.d(TAG, "save bitmap " + path + " into cache");
 
-                            mImagesCache.put(index, bitmap);
-                            mDiskImageCache.put(path.hashCode() + "", bitmap);
+                            if (!mIndexes.contains(path)) {
+                                int index = mIndexes.size();
+                                mIndexes.add(path);
+
+                                mImagesCache.put(index, bitmap);
+                                mDiskImageCache.put(path.hashCode() + "", bitmap);
+                            }
+
+                            Log.d(TAG,mIndexes.toString());
+
                         }
+                        return bitmap;
                     }
-                    return bitmap;
-                }
 
-                @Override
-                protected void onPostExecute(Bitmap bitmap) {
-                    super.onPostExecute(bitmap);
-                    if (mInto != null && bitmap != null) {
-                        if (mInto instanceof ImageView) {
-                            Log.d(TAG, "return bitmap " + path + " into ImageView");
-                            ((ImageView) mInto).setImageBitmap(bitmap);
-                        } else if (mInto instanceof Callback) {
-                            Log.d(TAG, "return bitmap " + path + " into Callback");
-                            ((Callback) mInto).onBitmapLoaded(path, bitmap);
-                        }
+                    @Override
+                    protected void onPostExecute(Bitmap bitmap) {
+                        super.onPostExecute(bitmap);
+                        loadBitmap(bitmap,path,into);
                     }
-                }
-            }.execute();
+                }.execute();
+            }
         }
         return bitmap;
+    }
+
+    private void addIntoWaiting(String path, Object into) {
+        String pathId = path.hashCode()+"";
+        synchronized(mIntoWaiting) {
+            if (path != null && into != null && mIntoWaiting != null) {
+                ArrayList<Object> intos = mIntoWaiting.get(pathId);
+                if (intos == null) {
+                    intos = new ArrayList<>();
+                    intos.add(into);
+                    mIntoWaiting.put(pathId, intos);
+                    sendMessage(DAVINCI_PATH, path);
+                }else{
+                    //already waiting for this path
+                    intos.add(into);
+                }
+            }
+        }
+    }
+
+    private void callIntoWaiting(final String path) {
+        String pathId = path.replace(DAVINCI_PATH, "");
+
+        Log.d(TAG,mIntoWaiting.toString());
+
+        synchronized(mIntoWaiting) {
+            if (path != null && mIntoWaiting != null) {
+                ArrayList<Object> intos = mIntoWaiting.get(pathId);
+                if (intos != null) {
+                    for (int i = 0; i < intos.size(); ++i) {
+                        Object into = intos.get(i);
+                        Log.d(TAG, "callIntoWaiting-loadImage " + path + " into " + into.getClass().toString());
+                        loadImage(path, into);
+                    }
+                    intos.clear();
+                    mIntoWaiting.remove(path);
+                }
+            }
+        }
     }
 
     private Bitmap getBitmap(String path) {
@@ -359,12 +422,11 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 if (firstAsset != null) {
                     Bitmap bitmap = loadBitmapFromAsset(firstAsset);
                     return bitmap;
-
                 }
             }
         }
 
-        Log.d(TAG, "can't find "+path+" ["+imageAssetName+"] in DataApi");
+        Log.d(TAG, "can't find " + path + " [" + imageAssetName + "] in DataApi");
 
         return null;
     }
@@ -410,6 +472,18 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         return BitmapFactory.decodeStream(assetInputStream);
     }
 
+    protected void sendMessage(final String path, final String message) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
+                for (Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage(mApiClient, node.getId(), path, message.getBytes()).await();
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         Wearable.MessageApi.addListener(mApiClient, this);
@@ -433,7 +507,15 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
+        for(DataEvent dataEvent : dataEvents){
+            String path = dataEvent.getDataItem().getUri().getPath();
+            Log.d(TAG,"onDataChanged("+path+")");
+            if (path.startsWith(DAVINCI_PATH)){
+                Log.d(TAG,"davinci-onDataChanged "+path);
 
+                callIntoWaiting(path);
+            }
+        }
     }
 
     public interface Callback {

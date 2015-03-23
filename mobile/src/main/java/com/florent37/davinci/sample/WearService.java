@@ -61,6 +61,8 @@ public class WearService extends WearableListenerService implements GoogleApiCli
             return;
         }
 
+        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
+
         final String path = messageEvent.getPath();
 
         if (path.equals("hello")) {
@@ -126,13 +128,12 @@ public class WearService extends WearableListenerService implements GoogleApiCli
             if (mApiClient.isConnected())
                 Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
 
-            DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("/image/" + position);
+            //DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("/image/" + position);
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        DaVinciDaemon.init(getApplicationContext(),mApiClient);
     }
 
     @Override
