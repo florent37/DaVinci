@@ -103,8 +103,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
                 Log.d(TAG, "nb elements to display :" + nombre);
 
-                DaVinci.init(this, nombre).loadFromDiskCache();
-
                 for (int i = 0; i < nombre; ++i) {
                     elementList.add(getElement(i));
                 }
