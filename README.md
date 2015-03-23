@@ -95,6 +95,12 @@ Community
 
 Looking for contributors, feel free to fork !
 
+Wear
+--------
+
+If you want to learn wear development : [http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/][tuto_wear].
+
+
 License
 --------
 
@@ -115,3 +121,4 @@ License
 
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/
 [android_doc]: https://developer.android.com/training/wearables/data-layer/assets.html
+[tuto_wear]: http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/
