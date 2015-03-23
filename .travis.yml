@@ -3,6 +3,8 @@ android:
   components:
     - build-tools-21.1.1
     - android-21
+    - add-on
+    - extra
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
