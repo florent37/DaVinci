@@ -79,12 +79,15 @@ In your smartphone service
     }
 ```
 
+Preload Bitmaps
+--------
+
 Send image to wear
 ```java
 DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").send();
 ```
 
-Send image to wear with "/image/0" path
+or with "/image/0" path
 ```java
 DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").into("/image/0");
 ```
