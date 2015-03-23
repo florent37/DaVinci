@@ -1,2 +1,5 @@
 language: android
-script: gradle assembleRelease
+android:
+  components:
+    - build-tools-22.0.0
+script: ./gradlew clean build
