@@ -15,13 +15,15 @@ import java.util.List;
 public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     private List<Row> mRows;
+    private List<Element> elementList;
 
     public ElementGridPagerAdapter(List<Element> elements, FragmentManager fm) {
         super(fm);
 
         this.mRows = new ArrayList<Row>();
+        this.elementList = new ArrayList<>(elements);
 
-        for (Element element : elements) {
+        for (Element element : elementList) {
             mRows.add(new Row(
                             CardFragment.create(element.getTitle(), element.getText())
                     )
@@ -37,7 +39,7 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public Drawable getBackgroundForRow(final int row) {
-        return DaVinci.with(null).load("http://i.imgur.com/o3ELrbX.jpg").into(this, row);
+        return DaVinci.with(null).load(elementList.get(row).getUrl()).into(this, row);
     }
 
     @Override
