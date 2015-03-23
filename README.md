@@ -8,12 +8,12 @@ Download
 
 In your wear module
 ```groovy
-compile 'com.florent37.davinci:davinci:1.0.1@aar'
+compile 'com.florent37.davinci:davinci:1.0.0@aar'
 ```
 
 In your smartphone module
 ```groovy
-compile 'com.florent37.davinci:davincidaemon:1.0.1@aar'
+compile 'com.florent37.davinci:davincidaemon:1.0.0@aar'
 ```
 
 
