@@ -46,7 +46,7 @@ install {
         // This generates POM.xml with proper parameters
         pom {
             project {
-                packaging 'aar'
+                packaging 'jar'
 
                 // Add your description here
                 name 'DaVinci'
@@ -92,7 +92,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
+task jar(type: Jar) {
+    //from android.sourceSets.main.java
+    from 'build/intermediates/classes/release/'
+}
+
 artifacts {
+    archives jar
     archives javadocJar
     archives sourcesJar
 }
@@ -102,6 +109,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 // https://github.com/bintray/gradle-bintray-plugin
 bintray {
+
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
 

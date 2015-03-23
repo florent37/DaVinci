@@ -6,18 +6,6 @@ DaVinci is an image downloading and caching library for Android Wear
 Download
 --------
 
-Download via Gradle:
-```groovy
-allprojects {
-    repositories {
-        jcenter()
-        maven {
-            url "http://dl.bintray.com/florent37/maven"
-        }
-    }
-}
-```
-
 In your wear module
 ```groovy
 compile 'com.florent37.davinci:davinci:1.0.1@aar'
@@ -39,23 +27,10 @@ Don't forget to add WRITE_EXTERNAL_STORAGE in your Wear AndroidManifest.xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
-Initialise DaVinci in your Activity
-```java
-
-@Override
-public void onConnected(Bundle bundle) {
-        Wearable.MessageApi.addListener(mApiClient, this);
-        Wearable.DataApi.addListener(mApiClient, this);
-
-        DaVinci.init(this, mApiClient);
-}
-
-```
-
 Load old bitmaps cached into disk
 
 ```java
-DaVinci.init(this, mApiClient).loadFromDiskCache();
+DaVinci.with(this).loadFromDiskCache();
 ```
 
 And use it wherever you want 
@@ -111,7 +86,7 @@ DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg
 ToDo
 --------
 
-* GoogleApiClient included into DaVinci
+* GoogleApiClient included into DaVinciDaemon
 * Service added into the smartphone module
 * Use URL to display bitmap onto your Wear
 
