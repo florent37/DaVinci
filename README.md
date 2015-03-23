@@ -90,6 +90,11 @@ ToDo
 * Service added into the smartphone module
 * Use URL to display bitmap onto your Wear
 
+Community
+--------
+
+Looking for contributors, feel free to fork !
+
 License
 --------
 
