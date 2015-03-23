@@ -2,37 +2,37 @@ package com.florent37.davinci.sample;
 
 public class Element {
 
-    private String titre;
-    private String texte;
+    private String title;
+    private String text;
     private int color;
     private String url;
 
-    public Element(String titre, String texte, int color) {
-        this.titre = titre;
-        this.texte = texte;
+    public Element(String title, String text, int color) {
+        this.title = title;
+        this.text = text;
         this.color = color;
     }
 
-    public Element(String titre, String texte, String url) {
-        this.titre = titre;
-        this.texte = texte;
+    public Element(String title, String text, String url) {
+        this.title = title;
+        this.text = text;
         this.url = url;
     }
 
-    public String getTitre() {
-        return titre;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTexte() {
-        return texte;
+    public String getText() {
+        return text;
     }
 
-    public void setTexte(String texte) {
-        this.texte = texte;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getColor() {

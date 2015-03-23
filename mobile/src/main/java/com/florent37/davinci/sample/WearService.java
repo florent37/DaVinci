@@ -50,16 +50,10 @@ public class WearService extends WearableListenerService implements GoogleApiCli
         mApiClient.disconnect();
     }
 
-    /**
-     * Appellé à la réception d'un message envoyé depuis la montre
-     *
-     * @param messageEvent message reçu
-     */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
 
-        //Ouvre une connexion vers la montre
         ConnectionResult connectionResult = mApiClient.blockingConnect(30, TimeUnit.SECONDS);
 
         if (!connectionResult.isSuccess()) {
@@ -67,21 +61,18 @@ public class WearService extends WearableListenerService implements GoogleApiCli
             return;
         }
 
-        //traite le message reçu
         final String path = messageEvent.getPath();
 
-        if (path.equals("bonjour")) {
+        if (path.equals("hello")) {
 
-            //Utilise Retrofit pour réaliser un appel REST
             AndroidService androidService = new RestAdapter.Builder()
                     .setEndpoint(AndroidService.ENDPOINT)
                     .build().create(AndroidService.class);
 
-            //Récupère et deserialise le contenu de mon fichier JSON en objet Element
             androidService.getElements(new Callback<List<Element>>() {
                 @Override
                 public void success(List<Element> elements, Response response) {
-                    envoyerListElements(elements);
+                    sendListElements(elements);
                 }
 
                 @Override
@@ -92,38 +83,23 @@ public class WearService extends WearableListenerService implements GoogleApiCli
         }
     }
 
-    /**
-     * Envoie la liste d'éléments à la montre
-     * Envoie de même les images
-     * @param elements
-     */
-    private void envoyerListElements(final List<Element> elements) {
+    private void sendListElements(final List<Element> elements) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int nombreElements = elements.size();
+                int nbElements = elements.size();
 
-                //Envoie des elements et leurs images
                 sendElements(elements);
 
-                //puis indique à la montre le nombre d'éléments à afficher
-                sendMessage("nombre_elements",String.valueOf(nombreElements));
+                sendMessage("nb_elements",String.valueOf(nbElements));
             }
         }).start();
     }
 
-    /**
-     * Envoie un message à la montre
-     *
-     * @param path    identifiant du message
-     * @param message message à transmettre
-     */
     protected void sendMessage(final String path, final String message) {
-        //effectué dans un trhead afin de ne pas être bloquant
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //envoie le message à tous les noeuds/montres connectées
                 final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
                 for (Node node : nodes.getNodes()) {
                     Wearable.MessageApi.sendMessage(mApiClient, node.getId(), path, message.getBytes()).await();
@@ -133,32 +109,23 @@ public class WearService extends WearableListenerService implements GoogleApiCli
         }).start();
     }
 
-    /**
-     * Permet d'envoyer une liste d'elements
-     */
     protected void sendElements(final List<Element> elements) {
 
-        //envoie chaque élémént 1 par 1
         for (int position = 0; position < elements.size(); ++position) {
 
             Element element = elements.get(position);
 
-            //créé un emplacement mémoire "element/[position]"
             final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/element/" + position);
 
-            //ajoute la date de mi[jase à jour
             putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
 
-            //ajoute l'element champ par champ
-            putDataMapRequest.getDataMap().putString("titre", element.getTitre());
+            putDataMapRequest.getDataMap().putString("title", element.getTitre());
             putDataMapRequest.getDataMap().putString("description", element.getDescription());
             putDataMapRequest.getDataMap().putString("url", element.getUrl());
 
-            //envoie la donnée à la montre
             if (mApiClient.isConnected())
                 Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
 
-            //puis envoie l'image associée
             DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).into("/image/" + position);
         }
     }

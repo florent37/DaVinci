@@ -61,23 +61,14 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         mApiClient.connect();
     }
 
-    /**
-     * Si nous avons une connection aux Google API, donc au smartphone
-     * Nous autorisons l'envoie de messages
-     */
     @Override
     public void onConnected(Bundle bundle) {
         Wearable.MessageApi.addListener(mApiClient, this);
         Wearable.DataApi.addListener(mApiClient, this);
 
-        //envoie le premier message
-        sendMessage("bonjour", "smartphone");
+        sendMessage("hello", "smartphone");
     }
 
-    /**
-     * A la fermeture de l'application, desactive le GoogleApiClient
-     * Et ferme l'envoie de message
-     */
     @Override
     protected void onStop() {
         if (null != mApiClient && mApiClient.isConnected()) {
@@ -97,69 +88,46 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     public void onConnectionFailed(ConnectionResult connectionResult) {
     }
 
-    /**
-     * Appellé à la réception d'un message envoyé depuis le smartphone
-     *
-     * @param messageEvent message reçu
-     */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        //traite le message reçu
         final String path = messageEvent.getPath();
-        //récupère le contenu du message
         final String message = new String(messageEvent.getData());
 
         if (elementList == null || elementList.isEmpty()) {
 
-            Log.d(TAG, "message reçu :" + path);
+            Log.d(TAG, "received mess message :" + path);
 
-            if (path.equals("nombre_elements")) {
+            if (path.equals("nb_elements")) {
                 elementList = new ArrayList<>();
-                int nombre = Integer.parseInt(message); //on part du principe que c'est bien un integer
+                int nombre = Integer.parseInt(message);
 
-                Log.d(TAG, "nombre d'éléments à afficher :" + nombre);
+                Log.d(TAG, "nb elements to display :" + nombre);
 
                 DaVinci.init(this, nombre).loadFromDiskCache();
 
-                        //si on reçoit "nombre" c'est que les données ont bien étés envoyées
                 for (int i = 0; i < nombre; ++i) {
                     elementList.add(getElement(i));
                 }
 
-                startMainScreen();
-            } else if (path.equals("bonjour")) {
-                elementList = new ArrayList<>();
-                elementList.add(new Element("Message reçu", message, Color.parseColor("#F44336")));
                 startMainScreen();
             }
         }
     }
 
     public void startMainScreen() {
-        //penser à effectuer les actions graphiques dans le UIThread
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //nous affichons ici dans notre viewpager
-
                 if (pager != null && pager.getAdapter() == null)
                     pager.setAdapter(new ElementGridPagerAdapter(elementList, getFragmentManager()));
             }
         });
     }
 
-    /**
-     * Envoie un message à au smartphone
-     *
-     * @param path    identifiant du message
-     * @param message message à transmettre
-     */
     protected void sendMessage(final String path, final String message) {
-        //effectué dans un trhead afin de ne pas être bloquant
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //envoie le message à tous les noeuds/montres connectées
                 final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
                 for (Node node : nodes.getNodes()) {
                     Wearable.MessageApi.sendMessage(mApiClient, node.getId(), path, message.getBytes()).await();
@@ -171,18 +139,11 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        //appellé lorsqu'une donnée à été mise à jour, nous utiliserons une autre méthode
     }
 
-    /**
-     * Récupère une URI de donnée en fonction d'un path
-     * via l'identifiant nodeId du smartphone
-     */
     protected Uri getUriForDataItem(String path) {
         try {
-            //recupère le nodeId du smartphone
             final String nodeId = Wearable.NodeApi.getConnectedNodes(mApiClient).await().getNodes().get(0).getId();
-            //construit l'uri pointant vers notre path
             Uri uri = new Uri.Builder().scheme(PutDataRequest.WEAR_URI_SCHEME).authority(nodeId).path(path).build();
             return uri;
         } catch (Exception e) {
@@ -191,11 +152,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         }
     }
 
-
-
-    /**
-     * Récupère un element depuis sa position
-     */
     public Element getElement(int index) {
         final Uri uri = getUriForDataItem("/element/" + index);
         if (uri != null) {
@@ -204,7 +160,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
                 final DataMapItem dataMapItem = DataMapItem.fromDataItem(result.getDataItem());
                 return new Element(
-                        dataMapItem.getDataMap().getString("titre"),
+                        dataMapItem.getDataMap().getString("title"),
                         dataMapItem.getDataMap().getString("description"),
                         dataMapItem.getDataMap().getString("url")
                 );
