@@ -27,17 +27,10 @@ Don't forget to add WRITE_EXTERNAL_STORAGE in your Wear AndroidManifest.xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
-Load old bitmaps cached into disk
-
-```java
-DaVinci.with(this).loadFromDiskCache();
-```
-
-And use it wherever you want 
-
-Into an imageview
+And use it wherever you want
 ```java
 DaVinci.with(context).load("/image/0").into(imageView);
+DaVinci.with(context).load("http://i.imgur.com/o3ELrbX.jpg").into(imageView);
 ```
 
 Into a an imageview
@@ -55,7 +48,7 @@ public Drawable getBackgroundForRow(final int row) {
 
 Into a CallBack
 ```java
-DaVinci.with(context).load("/image/" + row).into(new DaVinci.Callback() {
+DaVinci.with(context).load("http://i.imgur.com/o3ELrbX.jpg").into(new DaVinci.Callback() {
             @Override
             public void onBitmapLoaded(String path, Bitmap bitmap) {
 
@@ -77,18 +70,24 @@ In your smartphone service
     public void onConnected(Bundle bundle) {
         DaVinciDaemon.init(getApplicationContext(),mApiClient);
     }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        super.onMessageReceived(messageEvent);
+        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
+        ...
+    }
 ```
 
+Send image to wear
+```java
+DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").send();
+```
+
+Send image to wear with "/image/0" path
 ```java
 DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").into("/image/0");
 ```
-
-ToDo
---------
-
-* GoogleApiClient included into DaVinciDaemon
-* Service added into the smartphone module
-* Use URL to display bitmap onto your Wear
 
 Community
 --------

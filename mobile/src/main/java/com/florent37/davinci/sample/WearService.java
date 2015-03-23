@@ -53,6 +53,7 @@ public class WearService extends WearableListenerService implements GoogleApiCli
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
+        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
 
         ConnectionResult connectionResult = mApiClient.blockingConnect(30, TimeUnit.SECONDS);
 
@@ -61,7 +62,6 @@ public class WearService extends WearableListenerService implements GoogleApiCli
             return;
         }
 
-        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
 
         final String path = messageEvent.getPath();
 

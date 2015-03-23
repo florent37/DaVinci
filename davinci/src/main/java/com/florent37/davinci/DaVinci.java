@@ -48,7 +48,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     private final static String MESSAGE_DAVINCI = "davinci";
     private final static String DAVINCI_PATH = "/davinci/";
 
-    private String imageAssetName = "image";
+    private final static String DAVINCI_ASSET_IMAGE = "image";
+
+    private String imageAssetName = DAVINCI_ASSET_IMAGE;
 
     private int mSize;
     private Context mContext;
@@ -583,7 +585,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 Log.d(TAG, "davinci-onDataChanged " + path);
 
                 //download the bitmap and add it to cache
-                Asset asset = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap().getAsset(imageAssetName);
+                Asset asset = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap().getAsset(DAVINCI_ASSET_IMAGE);
                 Bitmap bitmap = loadBitmapFromAsset(asset);
                 if (bitmap != null)
                     saveBitmap(path.hashCode(), bitmap);

@@ -44,28 +44,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DaVinci.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DaVinci.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.19638826" vertical-offset="4623" max-vertical-offset="9480">
-              <caret line="314" column="44" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="44" />
+            <state vertical-scroll-proportion="-11.846154" vertical-offset="8497" max-vertical-offset="9510">
+              <caret line="587" column="121" selection-start-line="587" selection-start-column="121" selection-end-line="587" selection-end-column="121" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4289#4290#0" expanded="true" />
-                <element signature="e#4339#4340#0" expanded="true" />
-                <element signature="e#4380#4381#0" expanded="true" />
-                <element signature="e#4417#4418#0" expanded="true" />
-                <element signature="e#7349#8513#0" expanded="true" />
-                <element signature="e#8502#8503#0" expanded="true" />
-                <element signature="e#9175#9791#0" expanded="true" />
-                <element signature="e#9780#9781#0" expanded="true" />
-                <element signature="e#18217#18613#0" expanded="true" />
-                <element signature="e#18602#18603#0" expanded="true" />
-                <element signature="e#20205#20206#0" expanded="true" />
-                <element signature="e#20245#20246#0" expanded="true" />
-                <element signature="e#20650#20651#0" expanded="true" />
-                <element signature="e#20715#20716#0" expanded="true" />
+                <element signature="e#4365#4366#0" expanded="true" />
+                <element signature="e#4415#4416#0" expanded="true" />
+                <element signature="e#4456#4457#0" expanded="true" />
+                <element signature="e#4493#4494#0" expanded="true" />
+                <element signature="e#7425#8589#0" expanded="true" />
+                <element signature="e#8578#8579#0" expanded="true" />
+                <element signature="e#9251#9867#0" expanded="true" />
+                <element signature="e#9856#9857#0" expanded="true" />
+                <element signature="e#18293#18689#0" expanded="true" />
+                <element signature="e#18678#18679#0" expanded="true" />
+                <element signature="e#20286#20287#0" expanded="true" />
+                <element signature="e#20326#20327#0" expanded="true" />
+                <element signature="e#20731#20732#0" expanded="true" />
+                <element signature="e#20796#20797#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.49324325" vertical-offset="531" max-vertical-offset="1920">
+              <caret line="50" column="58" selection-start-line="50" selection-start-column="58" selection-end-line="50" selection-end-column="58" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -83,8 +93,8 @@
       <file leaf-file-name="WearService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/WearService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="2235">
-              <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="1755">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="55" selection-end-column="80" />
               <folding />
             </state>
           </provider>
@@ -3069,16 +3079,16 @@
         <option value="$PROJECT_DIR$/davincidaemon/build.gradle" />
         <option value="$PROJECT_DIR$/wear/src/main/java/com/florent37/davinci/sample/Element.java" />
         <option value="$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/Element.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/mobile/build.gradle" />
         <option value="$PROJECT_DIR$/wear/build.gradle" />
         <option value="$PROJECT_DIR$/davincidaemon/src/main/java/com/florent37/davinci/daemon/DaVinciDaemonService.java" />
         <option value="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/davincidaemon/src/main/java/com/florent37/davinci/daemon/DaVinciDaemon.java" />
         <option value="$PROJECT_DIR$/wear/src/main/java/com/florent37/davinci/sample/ElementGridPagerAdapter.java" />
-        <option value="$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/WearService.java" />
         <option value="$PROJECT_DIR$/wear/src/main/java/com/florent37/davinci/sample/MainActivity.java" />
+        <option value="$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/WearService.java" />
         <option value="$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -3807,7 +3817,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="4" y="23" width="1436" height="877" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3821,7 +3831,7 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998565" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -3872,13 +3882,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java</url>
-          <line>588</line>
+          <line>590</line>
           <properties />
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java</url>
-          <line>391</line>
+          <line>393</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
@@ -3967,20 +3977,20 @@
           <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4289#4290#0" expanded="true" />
-            <element signature="e#4339#4340#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
-            <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#7349#8513#0" expanded="true" />
-            <element signature="e#8502#8503#0" expanded="true" />
-            <element signature="e#9175#9791#0" expanded="true" />
-            <element signature="e#9780#9781#0" expanded="true" />
-            <element signature="e#18217#18613#0" expanded="true" />
-            <element signature="e#18602#18603#0" expanded="true" />
-            <element signature="e#20205#20206#0" expanded="true" />
-            <element signature="e#20245#20246#0" expanded="true" />
-            <element signature="e#20650#20651#0" expanded="true" />
-            <element signature="e#20715#20716#0" expanded="true" />
+            <element signature="e#4365#4366#0" expanded="true" />
+            <element signature="e#4415#4416#0" expanded="true" />
+            <element signature="e#4456#4457#0" expanded="true" />
+            <element signature="e#4493#4494#0" expanded="true" />
+            <element signature="e#7425#8589#0" expanded="true" />
+            <element signature="e#8578#8579#0" expanded="true" />
+            <element signature="e#9251#9867#0" expanded="true" />
+            <element signature="e#9856#9857#0" expanded="true" />
+            <element signature="e#18293#18689#0" expanded="true" />
+            <element signature="e#18678#18679#0" expanded="true" />
+            <element signature="e#20286#20287#0" expanded="true" />
+            <element signature="e#20326#20327#0" expanded="true" />
+            <element signature="e#20731#20732#0" expanded="true" />
+            <element signature="e#20796#20797#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3989,6 +3999,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="195">
           <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -4012,20 +4023,20 @@
           <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4289#4290#0" expanded="true" />
-            <element signature="e#4339#4340#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
-            <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#7349#8513#0" expanded="true" />
-            <element signature="e#8502#8503#0" expanded="true" />
-            <element signature="e#9175#9791#0" expanded="true" />
-            <element signature="e#9780#9781#0" expanded="true" />
-            <element signature="e#18217#18613#0" expanded="true" />
-            <element signature="e#18602#18603#0" expanded="true" />
-            <element signature="e#20205#20206#0" expanded="true" />
-            <element signature="e#20245#20246#0" expanded="true" />
-            <element signature="e#20650#20651#0" expanded="true" />
-            <element signature="e#20715#20716#0" expanded="true" />
+            <element signature="e#4365#4366#0" expanded="true" />
+            <element signature="e#4415#4416#0" expanded="true" />
+            <element signature="e#4456#4457#0" expanded="true" />
+            <element signature="e#4493#4494#0" expanded="true" />
+            <element signature="e#7425#8589#0" expanded="true" />
+            <element signature="e#8578#8579#0" expanded="true" />
+            <element signature="e#9251#9867#0" expanded="true" />
+            <element signature="e#9856#9857#0" expanded="true" />
+            <element signature="e#18293#18689#0" expanded="true" />
+            <element signature="e#18678#18679#0" expanded="true" />
+            <element signature="e#20286#20287#0" expanded="true" />
+            <element signature="e#20326#20327#0" expanded="true" />
+            <element signature="e#20731#20732#0" expanded="true" />
+            <element signature="e#20796#20797#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -4142,13 +4153,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-26.76" vertical-offset="831" max-vertical-offset="1935">
-          <caret line="100" column="143" selection-start-line="100" selection-start-column="143" selection-end-line="100" selection-end-column="143" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/SmartphoneMainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
@@ -4229,14 +4233,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/WearService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="2235">
-          <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/davincidaemon/src/main/java/com/florent37/davinci/daemon/DaVinciDaemon.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1614" max-vertical-offset="3630">
@@ -4271,6 +4267,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wear/src/main/java/com/florent37/davinci/sample/ElementGridPagerAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="322" max-vertical-offset="1005">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DiskLruImageCache.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="2565">
@@ -4287,35 +4291,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wear/src/main/java/com/florent37/davinci/sample/ElementGridPagerAdapter.java">
+    <entry file="file://$PROJECT_DIR$/mobile/src/main/java/com/florent37/davinci/sample/WearService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="322" max-vertical-offset="1005">
-          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="1755">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="55" selection-end-column="80" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19638826" vertical-offset="4623" max-vertical-offset="9480">
-          <caret line="314" column="44" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="44" />
+        <state vertical-scroll-proportion="-11.846154" vertical-offset="8497" max-vertical-offset="9510">
+          <caret line="587" column="121" selection-start-line="587" selection-start-column="121" selection-end-line="587" selection-end-column="121" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4289#4290#0" expanded="true" />
-            <element signature="e#4339#4340#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
-            <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#7349#8513#0" expanded="true" />
-            <element signature="e#8502#8503#0" expanded="true" />
-            <element signature="e#9175#9791#0" expanded="true" />
-            <element signature="e#9780#9781#0" expanded="true" />
-            <element signature="e#18217#18613#0" expanded="true" />
-            <element signature="e#18602#18603#0" expanded="true" />
-            <element signature="e#20205#20206#0" expanded="true" />
-            <element signature="e#20245#20246#0" expanded="true" />
-            <element signature="e#20650#20651#0" expanded="true" />
-            <element signature="e#20715#20716#0" expanded="true" />
+            <element signature="e#4365#4366#0" expanded="true" />
+            <element signature="e#4415#4416#0" expanded="true" />
+            <element signature="e#4456#4457#0" expanded="true" />
+            <element signature="e#4493#4494#0" expanded="true" />
+            <element signature="e#7425#8589#0" expanded="true" />
+            <element signature="e#8578#8579#0" expanded="true" />
+            <element signature="e#9251#9867#0" expanded="true" />
+            <element signature="e#9856#9857#0" expanded="true" />
+            <element signature="e#18293#18689#0" expanded="true" />
+            <element signature="e#18678#18679#0" expanded="true" />
+            <element signature="e#20286#20287#0" expanded="true" />
+            <element signature="e#20326#20327#0" expanded="true" />
+            <element signature="e#20731#20732#0" expanded="true" />
+            <element signature="e#20796#20797#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49324325" vertical-offset="531" max-vertical-offset="1920">
+          <caret line="50" column="58" selection-start-line="50" selection-start-column="58" selection-end-line="50" selection-end-column="58" />
+          <folding />
         </state>
       </provider>
     </entry>
