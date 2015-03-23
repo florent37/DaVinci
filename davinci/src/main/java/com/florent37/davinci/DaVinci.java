@@ -285,12 +285,19 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         }
     }
 
+    /**
+     * Start the loading of an image
+     * @param path path of the bitmap Or url of the image
+     * @param into element which will display the image
+     * @return the image from cache
+     */
     private Bitmap loadImage(final String path, final Object into) {
         if (mInto == null || mImagesCache == null)
             return null;
 
         Bitmap bitmap = null;
 
+        //image from real path (like /image/0)
         int indexOfPath = mIndexes.indexOf(path);
         if (indexOfPath >= 0)
             bitmap = mImagesCache.get(indexOfPath);
