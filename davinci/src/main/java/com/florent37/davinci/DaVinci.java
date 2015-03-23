@@ -189,14 +189,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             into(new BitmapCallback(adapter) {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (adapter != null)
-                                adapter.notifyRowBackgroundChanged(row);
-
-                        }
-                    });
+                    if (adapter != null)
+                        adapter.notifyRowBackgroundChanged(row);
                 }
             });
         }
@@ -215,13 +209,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             into(new BitmapCallback(adapter) {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (adapter != null)
-                                adapter.notifyPageBackgroundChanged(row, column);
-                        }
-                    });
+                    if (adapter != null)
+                        adapter.notifyPageBackgroundChanged(row, column);
                 }
             });
         }
@@ -290,15 +279,20 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @param into   the destination object
      */
     private static void returnBitmapInto(final Bitmap bitmap, final String path, final Object into) {
-        if (into != null && path != null && bitmap != null) {
-            if (into instanceof ImageView) {
-                Log.d(TAG, "return bitmap " + path + " into ImageView");
-                ((ImageView) into).setImageBitmap(bitmap);
-            } else if (into instanceof Callback) {
-                Log.d(TAG, "return bitmap " + path + " into Callback");
-                ((Callback) into).onBitmapLoaded(path, bitmap);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (into != null && path != null && bitmap != null) {
+                    if (into instanceof ImageView) {
+                        Log.d(TAG, "return bitmap " + path + " into ImageView");
+                        ((ImageView) into).setImageBitmap(bitmap);
+                    } else if (into instanceof Callback) {
+                        Log.d(TAG, "return bitmap " + path + " into Callback");
+                        ((Callback) into).onBitmapLoaded(path, bitmap);
+                    }
+                }
             }
-        }
+        });
     }
 
     /**

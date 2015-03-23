@@ -47,26 +47,24 @@
       <file leaf-file-name="DaVinci.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9751693" vertical-offset="2913" max-vertical-offset="9570">
-              <caret line="223" column="23" selection-start-line="223" selection-start-column="23" selection-end-line="223" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.19638826" vertical-offset="4623" max-vertical-offset="9480">
+              <caret line="314" column="44" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4289#4290#0" expanded="true" />
                 <element signature="e#4339#4340#0" expanded="true" />
                 <element signature="e#4380#4381#0" expanded="true" />
                 <element signature="e#4417#4418#0" expanded="true" />
-                <element signature="e#6100#6365#0" expanded="true" />
-                <element signature="e#6342#6343#0" expanded="true" />
-                <element signature="e#6972#7245#0" expanded="true" />
-                <element signature="e#7222#7223#0" expanded="true" />
-                <element signature="e#7794#8958#0" expanded="true" />
-                <element signature="e#8947#8948#0" expanded="true" />
-                <element signature="e#18444#18840#0" expanded="true" />
-                <element signature="e#18829#18830#0" expanded="true" />
-                <element signature="e#20432#20433#0" expanded="true" />
-                <element signature="e#20472#20473#0" expanded="true" />
-                <element signature="e#20877#20878#0" expanded="true" />
-                <element signature="e#20942#20943#0" expanded="true" />
+                <element signature="e#7349#8513#0" expanded="true" />
+                <element signature="e#8502#8503#0" expanded="true" />
+                <element signature="e#9175#9791#0" expanded="true" />
+                <element signature="e#9780#9781#0" expanded="true" />
+                <element signature="e#18217#18613#0" expanded="true" />
+                <element signature="e#18602#18603#0" expanded="true" />
+                <element signature="e#20205#20206#0" expanded="true" />
+                <element signature="e#20245#20246#0" expanded="true" />
+                <element signature="e#20650#20651#0" expanded="true" />
+                <element signature="e#20715#20716#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -3809,7 +3807,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="4" y="23" width="1436" height="877" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -3874,19 +3872,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java</url>
-          <line>184</line>
-          <properties />
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java</url>
-          <line>594</line>
+          <line>588</line>
           <properties />
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java</url>
-          <line>397</line>
+          <line>391</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
@@ -3979,18 +3971,16 @@
             <element signature="e#4339#4340#0" expanded="true" />
             <element signature="e#4380#4381#0" expanded="true" />
             <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#6100#6365#0" expanded="true" />
-            <element signature="e#6342#6343#0" expanded="true" />
-            <element signature="e#6972#7245#0" expanded="true" />
-            <element signature="e#7222#7223#0" expanded="true" />
-            <element signature="e#7794#8958#0" expanded="true" />
-            <element signature="e#8947#8948#0" expanded="true" />
-            <element signature="e#18444#18840#0" expanded="true" />
-            <element signature="e#18829#18830#0" expanded="true" />
-            <element signature="e#20432#20433#0" expanded="true" />
-            <element signature="e#20472#20473#0" expanded="true" />
-            <element signature="e#20877#20878#0" expanded="true" />
-            <element signature="e#20942#20943#0" expanded="true" />
+            <element signature="e#7349#8513#0" expanded="true" />
+            <element signature="e#8502#8503#0" expanded="true" />
+            <element signature="e#9175#9791#0" expanded="true" />
+            <element signature="e#9780#9781#0" expanded="true" />
+            <element signature="e#18217#18613#0" expanded="true" />
+            <element signature="e#18602#18603#0" expanded="true" />
+            <element signature="e#20205#20206#0" expanded="true" />
+            <element signature="e#20245#20246#0" expanded="true" />
+            <element signature="e#20650#20651#0" expanded="true" />
+            <element signature="e#20715#20716#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -4026,18 +4016,16 @@
             <element signature="e#4339#4340#0" expanded="true" />
             <element signature="e#4380#4381#0" expanded="true" />
             <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#6100#6365#0" expanded="true" />
-            <element signature="e#6342#6343#0" expanded="true" />
-            <element signature="e#6972#7245#0" expanded="true" />
-            <element signature="e#7222#7223#0" expanded="true" />
-            <element signature="e#7794#8958#0" expanded="true" />
-            <element signature="e#8947#8948#0" expanded="true" />
-            <element signature="e#18444#18840#0" expanded="true" />
-            <element signature="e#18829#18830#0" expanded="true" />
-            <element signature="e#20432#20433#0" expanded="true" />
-            <element signature="e#20472#20473#0" expanded="true" />
-            <element signature="e#20877#20878#0" expanded="true" />
-            <element signature="e#20942#20943#0" expanded="true" />
+            <element signature="e#7349#8513#0" expanded="true" />
+            <element signature="e#8502#8503#0" expanded="true" />
+            <element signature="e#9175#9791#0" expanded="true" />
+            <element signature="e#9780#9781#0" expanded="true" />
+            <element signature="e#18217#18613#0" expanded="true" />
+            <element signature="e#18602#18603#0" expanded="true" />
+            <element signature="e#20205#20206#0" expanded="true" />
+            <element signature="e#20245#20246#0" expanded="true" />
+            <element signature="e#20650#20651#0" expanded="true" />
+            <element signature="e#20715#20716#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -4309,26 +4297,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/davinci/src/main/java/com/florent37/davinci/DaVinci.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9751693" vertical-offset="2913" max-vertical-offset="9570">
-          <caret line="223" column="23" selection-start-line="223" selection-start-column="23" selection-end-line="223" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.19638826" vertical-offset="4623" max-vertical-offset="9480">
+          <caret line="314" column="44" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4289#4290#0" expanded="true" />
             <element signature="e#4339#4340#0" expanded="true" />
             <element signature="e#4380#4381#0" expanded="true" />
             <element signature="e#4417#4418#0" expanded="true" />
-            <element signature="e#6100#6365#0" expanded="true" />
-            <element signature="e#6342#6343#0" expanded="true" />
-            <element signature="e#6972#7245#0" expanded="true" />
-            <element signature="e#7222#7223#0" expanded="true" />
-            <element signature="e#7794#8958#0" expanded="true" />
-            <element signature="e#8947#8948#0" expanded="true" />
-            <element signature="e#18444#18840#0" expanded="true" />
-            <element signature="e#18829#18830#0" expanded="true" />
-            <element signature="e#20432#20433#0" expanded="true" />
-            <element signature="e#20472#20473#0" expanded="true" />
-            <element signature="e#20877#20878#0" expanded="true" />
-            <element signature="e#20942#20943#0" expanded="true" />
+            <element signature="e#7349#8513#0" expanded="true" />
+            <element signature="e#8502#8503#0" expanded="true" />
+            <element signature="e#9175#9791#0" expanded="true" />
+            <element signature="e#9780#9781#0" expanded="true" />
+            <element signature="e#18217#18613#0" expanded="true" />
+            <element signature="e#18602#18603#0" expanded="true" />
+            <element signature="e#20205#20206#0" expanded="true" />
+            <element signature="e#20245#20246#0" expanded="true" />
+            <element signature="e#20650#20651#0" expanded="true" />
+            <element signature="e#20715#20716#0" expanded="true" />
           </folding>
         </state>
       </provider>
