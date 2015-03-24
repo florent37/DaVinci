@@ -1,12 +1,38 @@
 language: android
+
+jdk:
+  - oraclejdk7
+  - openjdk7
+
 android:
   components:
+
     - build-tools-21.1.1
     - android-21
     - add-on
     - extra
-  licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-script: ./gradlew tasks
+
+# The libraries we can't get from Maven Central or similar
+    - extra-android-support
+    - extra-android-m2repository
+
+notifications:
+  email: true
+
+before_install:
+  # Disable services enabled by default
+  # http://docs.travis-ci.com/user/database-setup/#MySQL
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
+  # The following did not work reliable
+  # - sudo service mysql stop
+  # - sudo service postgresql stop
+
+install:
+  # Ensure Gradle wrapper is executable, download wrapper and show version
+  - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
+  # Download and show android dependencies
+  # - ./gradlew androidDependencies
+
+script:
+  - ./gradlew clean assembleDebug
