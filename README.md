@@ -3,6 +3,7 @@ DaVinci
 
 [![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci)
 
+![Alt DaVinciDroid](https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/davinci_droid_small.jpg)
 
 DaVinci is an image downloading and caching library for Android Wear
 
