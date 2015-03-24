@@ -36,7 +36,7 @@ DaVinci.with(context).load("/image/0").into(imageView);
 DaVinci.with(context).load("http://i.imgur.com/o3ELrbX.jpg").into(imageView);
 ```
 
-Into a an imageview
+Into an imageview
 ```java
 DaVinci.with(context).load("/image/0").into(imageView);
 ```
