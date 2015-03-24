@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Davinci by florent37</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Davinci</h1>
+        <h2>DaVinci is an image downloading and caching library for Android Wear</h2>
+        <a href="https://github.com/florent37/DaVinci" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="davinci" class="anchor" href="#davinci" aria-hidden="true"><span class="octicon octicon-link"></span></a>DaVinci</h1>
+
+<p><a href="https://travis-ci.org/florent37/DaVinci"><img src="https://travis-ci.org/florent37/DaVinci.svg?branch=master" alt="Build Status"></a></p>
+
+<p>DaVinci is an image downloading and caching library for Android Wear</p>
+
+<h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<p>In your wear module <a href="https://bintray.com/florent37/maven/DaVinci/_latestVersion"><img src="https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg" alt="Download"></a></p>
+
+<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.florent37.davinci:davinci:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
+
+<p>In your smartphone module  <a href="https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion"><img src="https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg" alt="Download"></a></p>
+
+<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.florent37.davinci:davincidaemon:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
+
+<p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/">Sonatype's <code>snapshots</code> repository</a>.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Don't forget to add WRITE_EXTERNAL_STORAGE in your Wear AndroidManifest.xml</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.WRITE_EXTERNAL_STORAGE<span class="pl-pds">"</span></span>/&gt;</pre></div>
+
+<p>And use it wherever you want</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>/image/0<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(imageView);
+<span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>http://i.imgur.com/o3ELrbX.jpg<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(imageView);</pre></div>
+
+<p>Into an imageview</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>/image/0<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(imageView);</pre></div>
+
+<p>Into a FragmentGridPagerAdapter</p>
+
+<div class="highlight highlight-java"><pre>@<span class="pl-smi">Override</span>
+<span class="pl-k">public</span> <span class="pl-smi">Drawable</span> getBackgroundForRow(<span class="pl-k">final</span> <span class="pl-k">int</span> row) {
+    <span class="pl-k">return</span> <span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>/image/<span class="pl-pds">"</span></span> <span class="pl-k">+</span> row)<span class="pl-k">.</span>into(<span class="pl-v">this</span>, row);
+}</pre></div>
+
+<p>Into a CallBack</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>http://i.imgur.com/o3ELrbX.jpg<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(<span class="pl-k">new</span> <span class="pl-smi">DaVinci</span>.<span class="pl-smi">Callback</span>() {
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onBitmapLoaded</span>(<span class="pl-smi">String</span> <span class="pl-v">path</span>, <span class="pl-smi">Bitmap</span> <span class="pl-v">bitmap</span>) {
+
+            }
+});</pre></div>
+
+<p>By default, the asset name used for the bitmap is "image", you can modify this </p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinci</span><span class="pl-k">.</span>with(context)<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>/image/0<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>setImageAssetName(<span class="pl-s"><span class="pl-pds">"</span>myImage<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(imageView);</pre></div>
+
+<h2>
+<a id="send-bitmaps" class="anchor" href="#send-bitmaps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Send Bitmaps</h2>
+
+<p>In your smartphone service</p>
+
+<div class="highlight highlight-java"><pre>    @<span class="pl-smi">Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> onMessageReceived(<span class="pl-smi">MessageEvent</span> messageEvent) {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onMessageReceived(messageEvent);
+        <span class="pl-smi">DaVinciDaemon</span><span class="pl-k">.</span>with(getApplicationContext())<span class="pl-k">.</span>handleMessage(messageEvent);
+        <span class="pl-c1">...</span>
+    }</pre></div>
+
+<h2>
+<a id="preload-bitmaps" class="anchor" href="#preload-bitmaps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preload Bitmaps</h2>
+
+<p>Send image to wear</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinciDaemon</span><span class="pl-k">.</span>with(getApplicationContext())<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>http://i.imgur.com/o3ELrbX.jpg<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>send();</pre></div>
+
+<p>or with "/image/0" path</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">DaVinciDaemon</span><span class="pl-k">.</span>with(getApplicationContext())<span class="pl-k">.</span>load(<span class="pl-s"><span class="pl-pds">"</span>http://i.imgur.com/o3ELrbX.jpg<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>into(<span class="pl-s"><span class="pl-pds">"</span>/image/0<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="community" class="anchor" href="#community" aria-hidden="true"><span class="octicon octicon-link"></span></a>Community</h2>
+
+<p>Looking for contributors, feel free to fork !</p>
+
+<h2>
+<a id="wear" class="anchor" href="#wear" aria-hidden="true"><span class="octicon octicon-link"></span></a>Wear</h2>
+
+<p>If you want to learn wear development : <a href="http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/">http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/</a>.</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>
+<a href="https://github.com/square/picasso">Picasso</a> used in DaVinciDaemon (from Square)</li>
+<li>
+<a href="https://github.com/JakeWharton/DiskLruCache">DiskLruCache</a> used in DaVinci (from JakeWharton)</li>
+</ul>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>Author: Florent Champigny</p>
+
+<p><a href="https://plus.google.com/+florentchampigny">
+  <img alt="Follow me on Google+" src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/gplus.png">
+</a>
+<a href="https://twitter.com/florent_champ">
+  <img alt="Follow me on Twitter" src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/twitter.png">
+</a>
+<a href="https://www.linkedin.com/profile/view?id=297860624">
+  <img alt="Follow me on LinkedIn" src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/linkedin.png">
+</a></p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<pre><code>Copyright 2015 florent37, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/florent37/DaVinci/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/florent37/DaVinci/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/florent37/DaVinci"></a> is maintained by <a href="https://github.com/florent37">florent37</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
