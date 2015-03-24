@@ -24,5 +24,5 @@ dependencies {
     compile 'com.google.android.support:wearable:1.1.0'
     compile 'com.google.android.gms:play-services-wearable:6.5.87'
     compile project(':davinci')
-    //compile 'com.florent37.davinci:davinci:1.0.1@aar'
+    //compile 'com.florent37.davinci:davinci:1.0.0@aar'
 }

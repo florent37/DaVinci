@@ -154,25 +154,37 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * Starts the treatment
      */
     public void into(ImageView imageView) {
-        if (imageView != null) {
-            this.mInto = imageView;
-            loadImage(this.mPath, mInto);
-        }
+        intoObject(imageView);
     }
 
     /**
      * Load the bitmap into this callback
      * Starts the treatment
      */
-    public void into(Callback callback) {
-        if (callback != null) {
-            this.mInto = callback;
-            loadImage(this.mPath, mInto);
+    public void into(final Callback callback) {
+        intoObject(callback);
+    }
+
+    private void intoObject(final Object objectInto){
+        if (objectInto != null) {
+            mInto = objectInto;
+
+            final String path = mPath;
+            final Object into = mInto;
+
+            //no need to retrieve image directly
+            new AsyncTask<Void,Void,Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    loadImage(path, into);
+                    return null;
+                }
+            }.execute();
         }
     }
 
     private Drawable returnDrawableIfAvailable(final String path) {
-        final Bitmap bitmap = loadFromLruCache(path);
+        final Bitmap bitmap = loadFromLruCache(path,false);
         if (bitmap != null && mContext != null) {
             return new BitmapDrawable(mContext.getResources(), bitmap);
         }
@@ -310,9 +322,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
         Log.d(TAG, "load(" + path + ")");
 
-        Bitmap bitmap = loadFromLruCache(path);
+        Bitmap bitmap = loadFromLruCache(path,true);
 
-        Log.d(TAG, "bitmap from lruCache " + bitmap);
+        Log.d(TAG, "bitmap from cache " + bitmap+" for "+path);
 
         if (bitmap != null) { //load directly from cache
             returnBitmapInto(bitmap, path, into);
@@ -338,9 +350,13 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         int key = path.hashCode();
 
         if (isUrlPath(path)) {
-            String imagePath = DAVINCI_PATH + key;
+            final String imagePath = DAVINCI_PATH + key;
             key = imagePath.hashCode();
+
+            Log.d(TAG,"key "+path+" = "+imagePath+" key="+key);
         }
+
+        Log.d(TAG,"key for "+path+" is "+key);
 
         return key;
     }
@@ -351,17 +367,17 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @param path Path or Url of the bitmap
      * @return Bitmap from cache if founded
      */
-    private Bitmap loadFromLruCache(final String path) {
+    private Bitmap loadFromLruCache(final String path, boolean tryFromDisk) {
 
         int key = getKey(path);
 
         Bitmap bitmap = mImagesCache.get(key); //try to retrieve from lruCache
 
-        Log.d(TAG, "bitmap " + path + " from lruCache " + bitmap);
+        Log.d(TAG, "bitmap " + path + " from lruCache ["+key+"] " + bitmap);
 
+        if (tryFromDisk && bitmap == null) {
+            bitmap = loadFromDiskLruCache(key); //try to retrieve from disk cache
 
-        if (bitmap == null) {
-            bitmap = loadFromDiskLruCache(path); //try to retrieve from disk cache
             Log.d(TAG, "bitmap " + path + " from diskLruCache " + bitmap);
             if (bitmap != null) { //if found on disk cache
                 mImagesCache.put(key, bitmap); //save it into lruCache
@@ -371,8 +387,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         return bitmap;
     }
 
-    private Bitmap loadFromDiskLruCache(final String path) {
-        Bitmap bitmap = mDiskImageCache.getBitmap("" + path.hashCode());
+    private Bitmap loadFromDiskLruCache(final int key) {
+        Log.d(TAG, "try to load from disk cache " + key);
+
+        Bitmap bitmap = mDiskImageCache.getBitmap(key+"");
         return bitmap;
     }
 
@@ -406,6 +424,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     }
 
     private void saveBitmap(final int key, final Bitmap bitmap) {
+        Log.d(TAG, "save bitmap " + key + " into cache");
+
         if (mImagesCache != null) {
             //save the image into LruCache
             mImagesCache.put(key, bitmap);
@@ -539,15 +559,16 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     }
 
     protected void sendMessage(final String path, final String message) {
-        new Thread(new Runnable() {
+        new AsyncTask<Void,Void,Void>() {
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
                 final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
                 for (Node node : nodes.getNodes()) {
                     Wearable.MessageApi.sendMessage(mApiClient, node.getId(), path, message.getBytes()).await();
                 }
+                return null;
             }
-        }).start();
+        }.execute();
     }
 
     @Override
@@ -588,7 +609,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 Asset asset = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap().getAsset(DAVINCI_ASSET_IMAGE);
                 Bitmap bitmap = loadBitmapFromAsset(asset);
                 if (bitmap != null)
-                    saveBitmap(path.hashCode(), bitmap);
+                    saveBitmap(getKey(path), bitmap);
 
                 //callbacks
                 callIntoWaiting(path);
