@@ -103,7 +103,7 @@ If you want to learn wear development : [http://tutos-android-france.com/develop
 Credits
 -------
 
-Author: Gabriele Mariotti (gabri.mariotti@gmail.com)
+Author: Florent Champigny
 
 <a href="https://plus.google.com/+florentchampigny">
   <img alt="Follow me on Google+"
