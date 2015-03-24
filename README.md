@@ -100,6 +100,12 @@ Wear
 
 If you want to learn wear development : [http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/][tuto_wear].
 
+Dependencies
+-------
+
+* [Picasso][picasso] used in DaVinciDaemon (from Square)
+* [DiskLruCache][disklrucache] used in DaVinci (from JakeWharton)
+
 Credits
 -------
 
@@ -117,8 +123,6 @@ Author: Florent Champigny
   <img alt="Follow me on LinkedIn"
        src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/linkedin.png" />
 </a>
-
-
 
 
 License
@@ -142,3 +146,5 @@ License
 [snap]: https://oss.sonatype.org/content/repositories/snapshots/
 [android_doc]: https://developer.android.com/training/wearables/data-layer/assets.html
 [tuto_wear]: http://tutos-android-france.com/developper-une-application-pour-les-montres-android-wear/
+[picasso]: https://github.com/square/picasso
+[disklrucache]: https://github.com/JakeWharton/DiskLruCache
