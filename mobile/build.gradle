@@ -26,6 +26,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
 
-    compile project(':davincidaemon')
-    //compile 'com.github.florent37:davincidaemon:1.0.0@aar'
+    //compile project(':davincidaemon')
+    compile 'com.github.florent37:davincidaemon:1.0.0@aar'
 }
