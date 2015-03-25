@@ -33,20 +33,28 @@
 
 <p><a href="https://travis-ci.org/florent37/DaVinci"><img src="https://travis-ci.org/florent37/DaVinci.svg?branch=master" alt="Build Status"></a></p>
 
-<p><img src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/davinci_droid_small.jpg" alt="Alt DaVinciDroid"></p>
+<p><img src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/davinci_new_small.jpg" alt="Alt DaVinciDroid"></p>
 
 <p>DaVinci is an image downloading and caching library for Android Wear</p>
 
 <h2>
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
+<p>In your root build.gradle add</p>
+
+<div class="highlight highlight-groovy"><pre>repositories {
+    maven {
+        url  <span class="pl-s"><span class="pl-pds">"</span>http://dl.bintray.com/florent37/maven<span class="pl-pds">"</span></span>
+    }
+}</pre></div>
+
 <p>In your wear module <a href="https://bintray.com/florent37/maven/DaVinci/_latestVersion"><img src="https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg" alt="Download"></a></p>
 
-<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.florent37.davinci:davinci:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.github.florent37:davinci:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
 
 <p>In your smartphone module  <a href="https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion"><img src="https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg" alt="Download"></a></p>
 
-<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.florent37.davinci:davincidaemon:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.github.florent37:davincidaemon:1.0.0@aar<span class="pl-pds">'</span></span></pre></div>
 
 <p>Snapshots of the development version are available in <a href="https://oss.sonatype.org/content/repositories/snapshots/">Sonatype's <code>snapshots</code> repository</a>.</p>
 
