@@ -1,4 +1,4 @@
-package com.florent37.davinci.daemon;
+package com.github.florent37.davinci.daemon;
 
 import android.content.Context;
 import android.graphics.Bitmap;

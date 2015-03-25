@@ -1,4 +1,4 @@
-package com.florent37.davinci;
+package com.github.florent37.davinci;
 
 import android.content.Context;
 import android.graphics.Bitmap;

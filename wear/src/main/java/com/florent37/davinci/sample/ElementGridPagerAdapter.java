@@ -2,12 +2,11 @@ package com.florent37.davinci.sample;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
-import com.florent37.davinci.DaVinci;
+import com.github.florent37.davinci.DaVinci;
 
 import java.util.ArrayList;
 import java.util.List;

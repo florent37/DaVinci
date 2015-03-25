@@ -38,7 +38,7 @@ dependencies {
 
 def siteUrl = 'https://github.com/florent37/DaVinci'      // Homepage URL of the library
 def gitUrl = 'https://github.com/florent37/DaVinci.git'   // Git repository URL
-group = "com.florent37.davinci"                      // Maven Group ID for the artifact
+group = "com.github.florent37"                      // Maven Group ID for the artifact
 
 
 install {

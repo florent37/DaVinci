@@ -27,5 +27,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
 
     compile project(':davincidaemon')
-    //compile 'com.florent37.davinci:davincidaemon:1.0.0@aar'
+    //compile 'com.github.florent37:davincidaemon:1.0.0@aar'
 }

@@ -12,12 +12,12 @@ Download
 
 In your wear module [![Download](https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg)](https://bintray.com/florent37/maven/DaVinci/_latestVersion)
 ```groovy
-compile 'com.florent37.davinci:davinci:1.0.0@aar'
+compile 'com.github.florent37:davinci:1.0.0@aar'
 ```
 
 In your smartphone module  [![Download](https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg)](https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion)
 ```groovy
-compile 'com.florent37.davinci:davincidaemon:1.0.0@aar'
+compile 'com.github.florent37:davincidaemon:1.0.0@aar'
 ```
 
 
