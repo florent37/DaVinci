@@ -115,11 +115,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @param context the application context
      */
     public static DaVinci init(Context context) {
-        if (INSTANCE == null)
-            INSTANCE = new DaVinci(context, DEFAULT_SIZE);
-        if (context != null)
-            INSTANCE.mContext = context;
-        return INSTANCE;
+        return init(context, DEFAULT_SIZE);
     }
 
     /**
