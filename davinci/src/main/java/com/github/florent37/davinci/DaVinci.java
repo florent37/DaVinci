@@ -110,15 +110,6 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     }
 
     /**
-     * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
-     *
-     * @param context the application context
-     */
-    public static DaVinci init(Context context) {
-        return init(context, DEFAULT_SIZE);
-    }
-
-    /**
      * Initialise DaVinci or retrieve the initialised one
      */
     public static DaVinci with(Context context) {
