@@ -1,6 +1,8 @@
 DaVinci
 =======
 
+[![Join the chat at https://gitter.im/florent37/DaVinci](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/florent37/DaVinci?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci)
 
 ![Alt DaVinciDroid](https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/davinci_new_small.jpg)
