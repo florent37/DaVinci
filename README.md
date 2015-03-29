@@ -1,7 +1,7 @@
 DaVinci
 =======
 
-[![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci)
+[![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-DaVinci-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1678)
 
 ![Alt DaVinciDroid](https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/davinci_new_small.jpg)
 
