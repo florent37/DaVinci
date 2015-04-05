@@ -205,7 +205,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * Load the bitmap into a GridPagerAdapter ar row [row]
      */
     public Drawable into(final GridPagerAdapter adapter, final int row) {
-        final Drawable drawable = returnDrawableIfAvailable(mPath,mTransformation);
+        final String path = mPath;
+        final Transformation transformation = mTransformation;
+
+        final Drawable drawable = returnDrawableIfAvailable(path,transformation);
         if (drawable != null)
             return drawable;
         else {
@@ -225,7 +228,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * Load the bitmap into a GridPagerAdapter at Page [row] / [column]
      */
     public Drawable into(final GridPagerAdapter adapter, final int row, final int column) {
-        Drawable drawable = returnDrawableIfAvailable(mPath,mTransformation);
+        final String path = mPath;
+        final Transformation transformation = mTransformation;
+
+        Drawable drawable = returnDrawableIfAvailable(path,transformation);
         if (drawable != null)
             return drawable;
         else {
@@ -397,11 +403,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         final String pathTransformed = generatePathFromTransformation(path, transformation);
 
         if (originalBitmap != null) {
-            //transform & save the bitmap
-            Bitmap transformedBitmap = transformation.transform(originalBitmap);
-            saveBitmap(getKey(pathTransformed), transformedBitmap);
+            Bitmap copy = originalBitmap.copy(originalBitmap.getConfig(), true);
+            if(copy != null) {
+                //transform & save the bitmap
+                Bitmap transformedBitmap = transformation.transform(copy);
+                saveBitmap(getKey(pathTransformed), transformedBitmap);
 
-            return transformedBitmap;
+                return transformedBitmap;
+            }
         }
         return null;
     }
@@ -472,9 +481,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                     saveBitmap(getKey(path), bitmap);
 
                     if (transformation != null) {
-                        bitmap = transformation.transform(bitmap);
-                        String newPath = generatePathFromTransformation(path, transformation);
-                        saveBitmap(getKey(newPath), bitmap);
+                        return transformAndSaveBitmap(path,transformation);
                     }
                 }
                 return bitmap;
@@ -545,13 +552,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
                         //transform the bitmap before load
                         if (transformation != null) {
-                            Bitmap bitmap = loadFromLruCache(path, true); //try to get the bitmap without transformation
-                            if (bitmap != null) {
-                                String newPath = generatePathFromTransformation(path, transformation);
-                                //transform & save the bitmap
-                                bitmap = transformation.transform(bitmap);
-                                saveBitmap(getKey(newPath), bitmap);
-                            }
+                                transformAndSaveBitmap(path,transformation);
                         }
 
                         //download the bitmap from bluetooth or retrieve from cache, and send it to callback
