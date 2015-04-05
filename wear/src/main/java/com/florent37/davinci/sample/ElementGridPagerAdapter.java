@@ -2,11 +2,13 @@ package com.florent37.davinci.sample;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
 import com.github.florent37.davinci.DaVinci;
+import com.github.florent37.davinci.transformation.BlurTransformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +17,12 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     private List<Row> mRows;
     private List<Element> elementList;
+    private Context mContext;
 
-    public ElementGridPagerAdapter(List<Element> elements, FragmentManager fm) {
+    public ElementGridPagerAdapter(Context context, List<Element> elements, FragmentManager fm) {
         super(fm);
 
+        this.mContext = context;
         this.mRows = new ArrayList<Row>();
         this.elementList = new ArrayList<>(elements);
 
@@ -38,7 +42,7 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public Drawable getBackgroundForRow(final int row) {
-        return DaVinci.with(null).load(elementList.get(row).getUrl()).into(this, row);
+        return DaVinci.with(mContext).load(elementList.get(row).getUrl()).transform(new BlurTransformation()).into(this, row);
     }
 
     @Override

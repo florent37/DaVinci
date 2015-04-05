@@ -186,20 +186,22 @@ public class DaVinciDaemon implements GoogleApiClient.ConnectionCallbacks, Messa
     }
 
     public void into(final String path) {
-        if (mUrl == null) {
-            Log.d(TAG, "must execute .load(url) before");
-        } else {
-            Log.d(TAG, "load "+mUrl);
+        if(path != null && !path.trim().isEmpty()) {
+            if (mUrl == null) {
+                Log.d(TAG, "must execute .load(url) before");
+            } else {
+                Log.d(TAG, "load " + mUrl);
 
-            final String tmpUrl = mUrl;
+                final String tmpUrl = mUrl;
 
-            //main handler for picasso
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    sendImage(tmpUrl, path);
-                }
-            });
+                //main handler for picasso
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendImage(tmpUrl, path);
+                    }
+                });
+            }
         }
     }
 

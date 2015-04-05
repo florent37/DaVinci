@@ -1,5 +1,7 @@
 package com.github.florent37.davinci;
 
+import com.github.florent37.davinci.transformation.Transformation;
+
 /**
  * Created by florentchampigny on 02/04/15.
  */

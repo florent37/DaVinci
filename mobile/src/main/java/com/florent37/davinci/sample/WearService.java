@@ -6,6 +6,7 @@ import android.util.Log;
 import com.github.florent37.davinci.daemon.DaVinciDaemon;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -13,6 +14,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -86,43 +88,35 @@ public class WearService extends WearableListenerService implements GoogleApiCli
                 int nbElements = elements.size();
 
                 sendElements(elements);
-
-                sendMessage("nb_elements",String.valueOf(nbElements));
-            }
-        }).start();
-    }
-
-    protected void sendMessage(final String path, final String message) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
-                for (Node node : nodes.getNodes()) {
-                    Wearable.MessageApi.sendMessage(mApiClient, node.getId(), path, message.getBytes()).await();
-
-                }
             }
         }).start();
     }
 
     protected void sendElements(final List<Element> elements) {
+        final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/elements/");
+
+        ArrayList<DataMap> elementsDataMap = new ArrayList<>();
 
         for (int position = 0; position < elements.size(); ++position) {
 
+            DataMap elementDataMap = new DataMap();
             Element element = elements.get(position);
+            elementDataMap.putString("timestamp", new Date().toString());
 
-            final PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/element/" + position);
+            elementDataMap.putString("titre", element.getTitre());
+            elementDataMap.putString("description", element.getDescription());
+            elementDataMap.putString("url", element.getUrl());
 
-            putDataMapRequest.getDataMap().putString("timestamp", new Date().toString());
+            elementsDataMap.add(elementDataMap);
 
-            putDataMapRequest.getDataMap().putString("title", element.getTitre());
-            putDataMapRequest.getDataMap().putString("description", element.getDescription());
-            putDataMapRequest.getDataMap().putString("url", element.getUrl());
+        }
+        putDataMapRequest.getDataMap().putDataMapArrayList("/list/",elementsDataMap);
 
-            if (mApiClient.isConnected())
-                Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
+        if (mApiClient.isConnected())
+            Wearable.DataApi.putDataItem(mApiClient, putDataMapRequest.asPutDataRequest());
 
-            DaVinciDaemon.with(getApplicationContext()).load(element.getUrl()).send();
+        for(int position = 0; position < elements.size(); ++position){
+            DaVinciDaemon.with(getApplicationContext()).load(elements.get(position).getUrl()).send();
         }
     }
 
