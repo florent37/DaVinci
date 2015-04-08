@@ -18,6 +18,7 @@ import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.github.florent37.davinci.transformation.Transformation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
@@ -52,12 +53,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     private String imageAssetName = DAVINCI_ASSET_IMAGE;
 
+    private final int cacheSize = 20 * 1024 * 1024; //20mo of disk cache
+
     private int mSize;
     private Context mContext;
     private LruCache<Integer, Bitmap> mImagesCache;
     private DiskLruImageCache mDiskImageCache;
 
-    private Map<String, ArrayList<Object>> mIntoWaiting = new HashMap<>();
+    private Map<String, ArrayList<WaintingContainer>> mIntoWaiting = new HashMap<>();
 
     private GoogleApiClient mApiClient;
 
@@ -66,6 +69,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     private Drawable mPlaceHolder;
     private String mPath;
     private Object mInto;
+    private Transformation mTransformation;
+
+    //region initialisation
 
     /**
      * Initialise DaVinci, muse have a googleApiClient to retrieve Bitmaps from Smartphone
@@ -77,11 +83,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
         Log.d(TAG, "====================================");
 
-        this.mImagesCache = new LruCache<>(size);
         this.mSize = size;
-
-        int cacheSize = 20 * 1024 * 1024; //20mo of disk cache
-        this.mDiskImageCache = new DiskLruImageCache(context, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100);
+        this.mImagesCache = new LruCache<>(mSize);
 
         this.mPlaceHolder = new ColorDrawable(Color.TRANSPARENT);
 
@@ -116,6 +119,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         return init(context, DEFAULT_SIZE);
     }
 
+    //endregion
+
+    //region parameters
+
     public String getImageAssetName() {
         return imageAssetName;
     }
@@ -132,7 +139,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @return BitmapCache instance
      */
     public DaVinci load(String path) {
+        this.resetParameters();
+
         this.mPath = path;
+        return this;
+    }
+
+    public DaVinci transform(Transformation transformation) {
+        this.mTransformation = transformation;
         return this;
     }
 
@@ -152,26 +166,37 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         intoObject(callback);
     }
 
-    private void intoObject(final Object objectInto){
+    //endregion
+
+    private void intoObject(final Object objectInto) {
         if (objectInto != null) {
             mInto = objectInto;
 
             final String path = mPath;
-            final Object into = mInto;
+            final Object into = objectInto;
+            final Transformation transformation = mTransformation;
 
             //no need to retrieve image directly
-            new AsyncTask<Void,Void,Void>(){
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    loadImage(path, into);
+                    loadImage(path, into, transformation);
                     return null;
                 }
             }.execute();
+
+            this.resetParameters();
         }
     }
 
-    private Drawable returnDrawableIfAvailable(final String path) {
-        final Bitmap bitmap = loadFromLruCache(path,false);
+    private Drawable returnDrawableIfAvailable(final String path, final Transformation transformation) {
+        Bitmap bitmap = null;
+        if (transformation == null) {
+            bitmap = loadFromLruCache(path, false);
+        } else {
+            bitmap = loadFromLruCache(generatePathFromTransformation(path, transformation), false);
+        }
+
         if (bitmap != null && mContext != null) {
             return new BitmapDrawable(mContext.getResources(), bitmap);
         }
@@ -183,11 +208,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * Load the bitmap into a GridPagerAdapter ar row [row]
      */
     public Drawable into(final GridPagerAdapter adapter, final int row) {
-        final Drawable drawable = returnDrawableIfAvailable(mPath);
+        final String path = mPath;
+        final Transformation transformation = mTransformation;
+
+        final Drawable drawable = returnDrawableIfAvailable(path, transformation);
         if (drawable != null)
             return drawable;
         else {
-            into(new BitmapCallback(adapter) {
+            into(new BitmapCallBack(adapter) {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
                     if (adapter != null)
@@ -196,6 +224,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             });
         }
 
+        this.resetParameters();
+
         return mPlaceHolder;
     }
 
@@ -203,11 +233,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * Load the bitmap into a GridPagerAdapter at Page [row] / [column]
      */
     public Drawable into(final GridPagerAdapter adapter, final int row, final int column) {
-        Drawable drawable = returnDrawableIfAvailable(mPath);
+        final String path = mPath;
+        final Transformation transformation = mTransformation;
+
+        Drawable drawable = returnDrawableIfAvailable(path, transformation);
         if (drawable != null)
             return drawable;
         else {
-            into(new BitmapCallback(adapter) {
+            into(new BitmapCallBack(adapter) {
                 @Override
                 public void onBitmapLoaded(String path, Bitmap bitmap) {
                     if (adapter != null)
@@ -215,7 +248,16 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 }
             });
         }
+
+        this.resetParameters();
+
         return mPlaceHolder;
+    }
+
+    private void resetParameters() {
+        this.mTransformation = null;
+        this.mInto = null;
+        this.mPath = null;
     }
 
     /**
@@ -270,6 +312,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             mImagesCache.evictAll();
         if (mDiskImageCache != null)
             mDiskImageCache.clearCache();
+
+        this.mDiskImageCache = new DiskLruImageCache(mContext, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100); //reopen
     }
 
     /**
@@ -303,15 +347,44 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @param into element which will display the image
      * @return the image from cache
      */
-    private Bitmap loadImage(final String path, final Object into) {
-        if (mInto == null || mImagesCache == null)
+    private Bitmap loadImage(final String path, final Object into, final Transformation transformation) {
+        if (into == null || mImagesCache == null || path == null || path.trim().isEmpty())
             return null;
 
         Log.d(TAG, "load(" + path + ")");
 
-        Bitmap bitmap = loadFromLruCache(path,true);
+        Bitmap bitmap = null;
 
-        Log.d(TAG, "bitmap from cache " + bitmap+" for "+path);
+        if (transformation == null) {
+            bitmap = loadFromLruCache(path, true);
+        } else {
+            final String pathTransformed = generatePathFromTransformation(path, transformation);
+            bitmap = loadFromLruCache(pathTransformed, true);
+
+            if (bitmap == null) { //if bitmap transformed not found in cache
+                bitmap = loadFromLruCache(path, true); //try to get the bitmap without transformation
+                if (bitmap != null) {
+                    new AsyncTask<Void, Void, Bitmap>() {
+                        @Override
+                        protected Bitmap doInBackground(Void... params) {
+                            return transformAndSaveBitmap(path, transformation);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Bitmap bitmap) {
+                            super.onPostExecute(bitmap);
+                            if (bitmap != null) {
+                                //now its available on cache, can call again loadImage with same parameters
+                                loadImage(path, into, transformation);
+                            }
+                        }
+                    }.execute();
+                    return null;
+                }
+            }
+        }
+
+        Log.d(TAG, "bitmap from cache " + bitmap + " for " + path);
 
         if (bitmap != null) { //load directly from cache
             returnBitmapInto(bitmap, path, into);
@@ -321,16 +394,38 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
             if (isUrlPath(path)) {
                 Log.d(TAG, "loadImage " + path + " send request to smartphone " + path.hashCode());
-                addIntoWaiting(path, into);
+                addIntoWaiting(path, into, transformation);
             } else {
-                downloadBitmap(path, into);
+                downloadBitmap(path, into, transformation);
             }
         }
         return bitmap;
     }
 
+    private String generatePathFromTransformation(final String path, final Transformation transformation) {
+        if (transformation == null)
+            return path;
+        else
+            return path + "|||" + transformation.key();
+    }
+
     private boolean isUrlPath(final String path) {
         return path.startsWith("http") || path.startsWith("www");
+    }
+
+    private Bitmap transformAndSaveBitmap(final String path, final Transformation transformation) {
+        Bitmap originalBitmap = loadFromDiskLruCache(getKey(path)); //try to get the bitmap without transformation
+
+        final String pathTransformed = generatePathFromTransformation(path, transformation);
+
+        if (originalBitmap != null) {
+            //transform & save the bitmap
+            Bitmap transformedBitmap = transformation.transform(originalBitmap);
+            saveBitmap(getKey(pathTransformed), transformedBitmap);
+
+            return transformedBitmap;
+        }
+        return null;
     }
 
     private int getKey(final String path) {
@@ -340,10 +435,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             final String imagePath = DAVINCI_PATH + key;
             key = imagePath.hashCode();
 
-            Log.d(TAG,"key "+path+" = "+imagePath+" key="+key);
+            Log.d(TAG, "key " + path + " = " + imagePath + " key=" + key);
         }
 
-        Log.d(TAG,"key for "+path+" is "+key);
+        Log.d(TAG, "key for " + path + " is " + key);
 
         return key;
     }
@@ -360,7 +455,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
         Bitmap bitmap = mImagesCache.get(key); //try to retrieve from lruCache
 
-        Log.d(TAG, "bitmap " + path + " from lruCache ["+key+"] " + bitmap);
+        Log.d(TAG, "bitmap " + path + " from lruCache [" + key + "] " + bitmap);
 
         if (tryFromDisk && bitmap == null) {
             bitmap = loadFromDiskLruCache(key); //try to retrieve from disk cache
@@ -377,7 +472,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     private Bitmap loadFromDiskLruCache(final int key) {
         Log.d(TAG, "try to load from disk cache " + key);
 
-        Bitmap bitmap = mDiskImageCache.getBitmap(key+"");
+        Bitmap bitmap = mDiskImageCache.getBitmap(key + "");
         return bitmap;
     }
 
@@ -387,7 +482,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @param path the path or url of the image
      * @param into the destination object
      */
-    private void downloadBitmap(final String path, final Object into) {
+    private void downloadBitmap(final String path, final Object into, final Transformation transformation) {
         //download the bitmap from bluetooth
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
@@ -396,7 +491,11 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 Log.d(TAG, "bitmap from bluetooth " + path + " " + bitmap);
                 if (bitmap != null) {
                     Log.d(TAG, "save bitmap " + path + " into cache");
-                    saveBitmap(path.hashCode(), bitmap);
+                    saveBitmap(getKey(path), bitmap);
+
+                    if (transformation != null) {
+                        return transformAndSaveBitmap(path, transformation);
+                    }
                 }
                 return bitmap;
             }
@@ -424,20 +523,22 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         }
     }
 
-    private void addIntoWaiting(final String path, final Object into) {
+    private void addIntoWaiting(final String path, final Object into, final Transformation transformation) {
         final String pathId = path.hashCode() + "";
         synchronized (mIntoWaiting) {
             if (path != null && into != null && mIntoWaiting != null) {
-                ArrayList<Object> intos = mIntoWaiting.get(pathId);
+                ArrayList<WaintingContainer> intos = mIntoWaiting.get(pathId);
+                WaintingContainer waintingContainer = new WaintingContainer(into, transformation);
+
                 if (intos == null) {
                     intos = new ArrayList<>();
-                    intos.add(into);
+                    intos.add(waintingContainer);
                     mIntoWaiting.put(pathId, intos);
                     sendMessage(DAVINCI_PATH, path);
                 } else {
                     //already waitings for this path
-                    if (!intos.contains(into))
-                        intos.add(into);
+                    if (!intos.contains(waintingContainer))
+                        intos.add(waintingContainer);
                 }
             }
         }
@@ -451,17 +552,24 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         Log.d(TAG, "mIntoWaiting=" + mIntoWaiting.toString());
 
         synchronized (mIntoWaiting) {
-            if (path != null && mIntoWaiting != null) {
+            if (mIntoWaiting != null) {
 
                 //retrieve the waiting callbacks
-                ArrayList<Object> intos = mIntoWaiting.get(pathId);
+                ArrayList<WaintingContainer> intos = mIntoWaiting.get(pathId);
                 if (intos != null) {
                     for (int i = 0; i < intos.size(); ++i) {
-                        Object into = intos.get(i);
+                        WaintingContainer waintingContainer = intos.get(i);
+                        final Object into = waintingContainer.getInto();
+                        final Transformation transformation = waintingContainer.getTransformation();
                         Log.d(TAG, "callIntoWaiting-loadImage " + path + " into " + into.getClass().toString());
 
+                        //transform the bitmap before load
+                        if (transformation != null) {
+                            transformAndSaveBitmap(path, transformation);
+                        }
+
                         //download the bitmap from bluetooth or retrieve from cache, and send it to callback
-                        loadImage(path, into);
+                        loadImage(path, into, transformation);
                     }
 
                     //clear the waitings for this path
@@ -471,6 +579,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             }
         }
     }
+
+    //region DataApi
 
     private Bitmap getBitmap(String path) {
         if (mApiClient != null) {
@@ -546,7 +656,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     }
 
     protected void sendMessage(final String path, final String message) {
-        new AsyncTask<Void,Void,Void>() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 final NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
@@ -579,6 +689,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     }
 
+    //endregion
+
     /**
      * When received assets from DataApi
      *
@@ -604,33 +716,12 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         }
     }
 
+//region CallBack
+
     public interface Callback {
         public void onBitmapLoaded(String path, Bitmap bitmap);
     }
 
-    private abstract class BitmapCallback implements Callback {
-        private Object into;
-
-        protected BitmapCallback(Object into) {
-            this.into = into;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            BitmapCallback that = (BitmapCallback) o;
-
-            if (into != null ? !into.equals(that.into) : that.into != null) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            return into != null ? into.hashCode() : 0;
-        }
-    }
+//endregion
 
 }
