@@ -53,6 +53,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     private String imageAssetName = DAVINCI_ASSET_IMAGE;
 
+    private final int cacheSize = 20 * 1024 * 1024; //20mo of disk cache
+
     private int mSize;
     private Context mContext;
     private LruCache<Integer, Bitmap> mImagesCache;
@@ -81,11 +83,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
         Log.d(TAG, "====================================");
 
-        this.mImagesCache = new LruCache<>(size);
         this.mSize = size;
-
-        int cacheSize = 20 * 1024 * 1024; //20mo of disk cache
-        this.mDiskImageCache = new DiskLruImageCache(context, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100);
+        this.mImagesCache = new LruCache<>(mSize);
 
         this.mPlaceHolder = new ColorDrawable(Color.TRANSPARENT);
 
@@ -183,6 +182,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                     return null;
                 }
             }.execute();
+
+            this.resetParameters();
         }
     }
 
@@ -221,6 +222,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             });
         }
 
+        this.resetParameters();
+
         return mPlaceHolder;
     }
 
@@ -243,7 +246,16 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                 }
             });
         }
+
+        this.resetParameters();
+
         return mPlaceHolder;
+    }
+
+    private void resetParameters(){
+        this.mTransformation = null;
+        this.mInto = null;
+        this.mPath = null;
     }
 
     /**
@@ -298,6 +310,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             mImagesCache.evictAll();
         if (mDiskImageCache != null)
             mDiskImageCache.clearCache();
+
+        this.mDiskImageCache = new DiskLruImageCache(mContext, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100); //reopen
     }
 
     /**
@@ -398,15 +412,14 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
     }
 
     private Bitmap transformAndSaveBitmap(final String path, final Transformation transformation) {
-        Bitmap originalBitmap = loadFromLruCache(path, true); //try to get the bitmap without transformation
+        Bitmap originalBitmap = loadFromDiskLruCache(getKey(path)); //try to get the bitmap without transformation
 
         final String pathTransformed = generatePathFromTransformation(path, transformation);
 
         if (originalBitmap != null) {
-            Bitmap copy = originalBitmap.copy(originalBitmap.getConfig(), true);
-            if(copy != null) {
+            if(originalBitmap != null) {
                 //transform & save the bitmap
-                Bitmap transformedBitmap = transformation.transform(copy);
+                Bitmap transformedBitmap = transformation.transform(originalBitmap);
                 saveBitmap(getKey(pathTransformed), transformedBitmap);
 
                 return transformedBitmap;
@@ -539,7 +552,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         Log.d(TAG, "mIntoWaiting=" + mIntoWaiting.toString());
 
         synchronized (mIntoWaiting) {
-            if (path != null && mIntoWaiting != null) {
+            if (mIntoWaiting != null) {
 
                 //retrieve the waiting callbacks
                 ArrayList<WaintingContainer> intos = mIntoWaiting.get(pathId);

@@ -76,13 +76,13 @@ public class DiskLruImageCache {
             if (writeBitmapToFile(data, editor)) {
                 mDiskCache.flush();
                 editor.commit();
-                Log.d("cache_test_DISK_", "image put on disk cache " + key);
+                Log.d(TAG, "image put on disk cache " + key);
             } else {
                 editor.abort();
-                Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                Log.d(TAG, "ERROR on: image put on disk cache " + key);
             }
         } catch (IOException e) {
-            Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+            Log.d(TAG, "ERROR on: image put on disk cache " + key);
             try {
                 if (editor != null) {
                     editor.abort();
@@ -117,7 +117,7 @@ public class DiskLruImageCache {
             }
         }
 
-        Log.d("cache_test_DISK_", bitmap == null ? "" : "image read from disk " + key);
+        Log.d(TAG, bitmap == null ? "" : "image read from disk " + key);
 
         return bitmap;
 
@@ -143,7 +143,7 @@ public class DiskLruImageCache {
     }
 
     public void clearCache() {
-        Log.d("cache_test_DISK_", "disk cache CLEARED");
+        Log.d(TAG, "disk cache CLEARED");
         try {
             mDiskCache.delete();
         } catch (IOException e) {

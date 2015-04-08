@@ -10,11 +10,16 @@ import com.github.florent37.davinci.utils.FastBlurHelper;
 public class BlurTransformation implements Transformation {
     @Override
     public Bitmap transform(Bitmap source) {
-        return FastBlurHelper.doBlur(source, 10, false);
+        Bitmap result = FastBlurHelper.doBlur(source, 10, false);
+        if (result != source) {
+            // Same bitmap is returned if sizes are the same
+            source.recycle();
+        }
+        return result;
     }
 
     @Override
     public String key() {
-        return "BlurTransformation";
+        return "BlurTransformation2";
     }
 }

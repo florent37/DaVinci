@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         dotsPageIndicator.setPager(pager);
 
-        //DaVinci.with(this).clear();
+        DaVinci.with(this).clear();
     }
 
     /**
