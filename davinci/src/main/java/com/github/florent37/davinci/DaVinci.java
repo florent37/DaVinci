@@ -139,6 +139,8 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @return BitmapCache instance
      */
     public DaVinci load(String path) {
+        this.resetParameters();
+
         this.mPath = path;
         return this;
     }
@@ -189,10 +191,10 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
     private Drawable returnDrawableIfAvailable(final String path, final Transformation transformation) {
         Bitmap bitmap = null;
-        if(transformation == null){
+        if (transformation == null) {
             bitmap = loadFromLruCache(path, false);
-        }else{
-            bitmap = loadFromLruCache(generatePathFromTransformation(path,transformation), false);
+        } else {
+            bitmap = loadFromLruCache(generatePathFromTransformation(path, transformation), false);
         }
 
         if (bitmap != null && mContext != null) {
@@ -209,7 +211,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         final String path = mPath;
         final Transformation transformation = mTransformation;
 
-        final Drawable drawable = returnDrawableIfAvailable(path,transformation);
+        final Drawable drawable = returnDrawableIfAvailable(path, transformation);
         if (drawable != null)
             return drawable;
         else {
@@ -234,7 +236,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         final String path = mPath;
         final Transformation transformation = mTransformation;
 
-        Drawable drawable = returnDrawableIfAvailable(path,transformation);
+        Drawable drawable = returnDrawableIfAvailable(path, transformation);
         if (drawable != null)
             return drawable;
         else {
@@ -252,7 +254,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         return mPlaceHolder;
     }
 
-    private void resetParameters(){
+    private void resetParameters() {
         this.mTransformation = null;
         this.mInto = null;
         this.mPath = null;
@@ -417,13 +419,11 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         final String pathTransformed = generatePathFromTransformation(path, transformation);
 
         if (originalBitmap != null) {
-            if(originalBitmap != null) {
-                //transform & save the bitmap
-                Bitmap transformedBitmap = transformation.transform(originalBitmap);
-                saveBitmap(getKey(pathTransformed), transformedBitmap);
+            //transform & save the bitmap
+            Bitmap transformedBitmap = transformation.transform(originalBitmap);
+            saveBitmap(getKey(pathTransformed), transformedBitmap);
 
-                return transformedBitmap;
-            }
+            return transformedBitmap;
         }
         return null;
     }
@@ -494,7 +494,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
                     saveBitmap(getKey(path), bitmap);
 
                     if (transformation != null) {
-                        return transformAndSaveBitmap(path,transformation);
+                        return transformAndSaveBitmap(path, transformation);
                     }
                 }
                 return bitmap;
@@ -565,7 +565,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
                         //transform the bitmap before load
                         if (transformation != null) {
-                                transformAndSaveBitmap(path,transformation);
+                            transformAndSaveBitmap(path, transformation);
                         }
 
                         //download the bitmap from bluetooth or retrieve from cache, and send it to callback
@@ -718,9 +718,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
 
 //region CallBack
 
-public interface Callback {
-    public void onBitmapLoaded(String path, Bitmap bitmap);
-}
+    public interface Callback {
+        public void onBitmapLoaded(String path, Bitmap bitmap);
+    }
 
 //endregion
 
