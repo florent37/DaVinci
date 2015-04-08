@@ -171,7 +171,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             mInto = objectInto;
 
             final String path = mPath;
-            final Object into = mInto;
+            final Object into = objectInto;
             final Transformation transformation = mTransformation;
 
             //no need to retrieve image directly
@@ -346,7 +346,7 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
      * @return the image from cache
      */
     private Bitmap loadImage(final String path, final Object into, final Transformation transformation) {
-        if (mInto == null || mImagesCache == null || path == null || path.trim().isEmpty())
+        if (into == null || mImagesCache == null || path == null || path.trim().isEmpty())
             return null;
 
         Log.d(TAG, "load(" + path + ")");
