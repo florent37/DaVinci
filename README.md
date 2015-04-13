@@ -118,6 +118,18 @@ Pass an instance of this class to the transform method
 DaVinci.with(context).load(url).transform(new ResizeTransformation(300)).into(imageView);
 ```
 
+Prodvided Transformations :
+
+**Blur**
+```java
+DaVinci.with(context).load(url).transform(new BlurTransformation()).into(imageView);
+```
+
+**Resizing**
+```java
+DaVinci.with(context).load(url).transform(new ResizeTransformation(maxWidth)).into(imageView);
+```
+
 Send Bitmaps
 --------
 
