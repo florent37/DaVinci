@@ -42,6 +42,7 @@ public class ElementGridPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public Drawable getBackgroundForRow(final int row) {
+        //return DaVinci.with(mContext).load("/image/0").into(this, row);
         if(row%2==0) {
             return DaVinci.with(mContext).load(elementList.get(row).getUrl()).transform(new BlurTransformation()).into(this, row);
         }else

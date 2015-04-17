@@ -84,7 +84,9 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
         Log.d(TAG, "====================================");
 
         this.mSize = size;
+        this.mContext = context;
         this.mImagesCache = new LruCache<>(mSize);
+        this.mDiskImageCache= new DiskLruImageCache(mContext, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100);
 
         this.mPlaceHolder = new ColorDrawable(Color.TRANSPARENT);
 
@@ -312,8 +314,6 @@ public class DaVinci implements GoogleApiClient.ConnectionCallbacks, GoogleApiCl
             mImagesCache.evictAll();
         if (mDiskImageCache != null)
             mDiskImageCache.clearCache();
-
-        this.mDiskImageCache = new DiskLruImageCache(mContext, TAG, cacheSize, Bitmap.CompressFormat.JPEG, 100); //reopen
     }
 
     /**

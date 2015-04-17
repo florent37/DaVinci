@@ -63,6 +63,8 @@ public class WearService extends WearableListenerService implements GoogleApiCli
 
         if (path.equals("hello")) {
 
+            //DaVinciDaemon.with(getApplicationContext()).load("http://lorempixel.com/400/200/").into("/image/0");
+
             AndroidService androidService = new RestAdapter.Builder()
                     .setEndpoint(AndroidService.ENDPOINT)
                     .build().create(AndroidService.class);
