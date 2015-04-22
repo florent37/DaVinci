@@ -1,6 +1,8 @@
 DaVinci
 =======
 
+[![Join the chat at https://gitter.im/florent37/DaVinci](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/florent37/DaVinci?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-DaVinci-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1678)
 [![Android Weekly](https://img.shields.io/badge/android--weekly-147-blue.svg)](http://androidweekly.net/issues/issue-147)
