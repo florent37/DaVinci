@@ -42,6 +42,8 @@ public class DiskLruImageCache {
             throws IOException, FileNotFoundException {
         OutputStream out = null;
         try {
+            bitmap.setHasAlpha(true);
+            //bitmap.setConfig(Bitmap.Config.ARGB_8888);
             out = new BufferedOutputStream(editor.newOutputStream(0), IO_BUFFER_SIZE);
             return bitmap.compress(mCompressFormat, mCompressQuality, out);
         } finally {
@@ -110,7 +112,9 @@ public class DiskLruImageCache {
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.inPremultiplied = true;
                 bitmap = BitmapFactory.decodeStream(buffIn,null,options);
+                bitmap.setHasAlpha(true);
             }
         } catch (IOException e) {
             e.printStackTrace();
