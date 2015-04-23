@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.GridViewPager;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.github.florent37.davinci.DaVinci;
 import com.google.android.gms.common.ConnectionResult;
@@ -37,6 +38,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     protected GoogleApiClient mApiClient;
 
+    private ImageView mImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,10 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         pager = (GridViewPager) findViewById(R.id.pager);
         dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         dotsPageIndicator.setPager(pager);
+
+        mImageView = (ImageView) findViewById(R.id.imageWithTransparency);
+
+        DaVinci.with(this).load("http://www.seomofo.com/downloads/new-google-logo-knockoff.png").into(mImageView);
     }
 
     /**
