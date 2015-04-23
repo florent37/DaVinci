@@ -20,7 +20,7 @@ import java.io.OutputStream;
 public class DiskLruImageCache {
 
     private DiskLruCache mDiskCache;
-    private Bitmap.CompressFormat mCompressFormat = Bitmap.CompressFormat.JPEG;
+    private Bitmap.CompressFormat mCompressFormat = Bitmap.CompressFormat.PNG;
     private int mCompressQuality = 70;
     private static final int APP_VERSION = 1;
     private static final int VALUE_COUNT = 1;
@@ -107,7 +107,10 @@ public class DiskLruImageCache {
             if (in != null) {
                 final BufferedInputStream buffIn =
                         new BufferedInputStream(in, IO_BUFFER_SIZE);
-                bitmap = BitmapFactory.decodeStream(buffIn);
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                bitmap = BitmapFactory.decodeStream(buffIn,null,options);
             }
         } catch (IOException e) {
             e.printStackTrace();
