@@ -179,6 +179,12 @@ Dependencies
 * [Picasso][picasso] used in DaVinciDaemon (from Square)
 * [DiskLruCache][disklrucache] used in DaVinci (from JakeWharton)
 
+Changelog
+-------
+
+**1.2**
+- Bitmaps are now saved as PNG to preserve transparency
+
 Credits
 -------
 
