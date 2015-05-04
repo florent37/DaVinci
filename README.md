@@ -12,17 +12,6 @@ DaVinci is an image downloading and caching library for Android Wear
 Download
 --------
 
-In your root build.gradle add
-```groovy
-allprojects {
-    repositories {
-        maven {
-            url  "http://dl.bintray.com/florent37/maven"
-        }
-    }
-}
-```
-
 In your wear module [![Download](https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg)](https://bintray.com/florent37/maven/DaVinci/_latestVersion)
 ```groovy
 compile ('com.github.florent37:davinci:1.0.2@aar'){
