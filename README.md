@@ -1,7 +1,6 @@
 DaVinci
 =======
 
-[![Build Status](https://travis-ci.org/florent37/DaVinci.svg?branch=master)](https://travis-ci.org/florent37/DaVinci)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-DaVinci-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1678)
 [![Android Weekly](https://img.shields.io/badge/android--weekly-147-blue.svg)](http://androidweekly.net/issues/issue-147)
 
@@ -14,20 +13,17 @@ Download
 
 In your wear module [![Download](https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg)](https://bintray.com/florent37/maven/DaVinci/_latestVersion)
 ```groovy
-compile ('com.github.florent37:davinci:1.0.2@aar'){
+compile ('com.github.florent37:davinci:1.0.3@aar'){
     transitive = true
 }
 ```
 
 In your smartphone module  [![Download](https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg)](https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion)
 ```groovy
-compile ('com.github.florent37:davincidaemon:1.0.2@aar'){
+compile ('com.github.florent37:davincidaemon:1.0.3@aar'){
      transitive = true
 }
 ```
-
-
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
 
 Usage
 --------
@@ -69,6 +65,32 @@ DaVinci.with(context).load("http://i.imgur.com/o3ELrbX.jpg").into(new DaVinci.Ca
 By default, the asset name used for the bitmap is "image", you can modify this 
 ```java
 DaVinci.with(context).load("/image/0").setImageAssetName("myImage").into(imageView);
+```
+
+Send Bitmaps
+--------
+
+In your smartphone service
+```java
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        super.onMessageReceived(messageEvent);
+        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
+        ...
+    }
+```
+
+Preload Bitmaps
+--------
+
+Send image to wear
+```java
+DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").send();
+```
+
+or with "/image/0" path
+```java
+DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").into("/image/0");
 ```
 
 Image Transformation
@@ -119,32 +141,6 @@ DaVinci.with(context).load(url).transform(new BlurTransformation()).into(imageVi
 **Resizing**
 ```java
 DaVinci.with(context).load(url).transform(new ResizeTransformation(maxWidth)).into(imageView);
-```
-
-Send Bitmaps
---------
-
-In your smartphone service
-```java
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        super.onMessageReceived(messageEvent);
-        DaVinciDaemon.with(getApplicationContext()).handleMessage(messageEvent);
-        ...
-    }
-```
-
-Preload Bitmaps
---------
-
-Send image to wear
-```java
-DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").send();
-```
-
-or with "/image/0" path
-```java
-DaVinciDaemon.with(getApplicationContext()).load("http://i.imgur.com/o3ELrbX.jpg").into("/image/0");
 ```
 
 TODO

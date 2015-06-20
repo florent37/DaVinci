@@ -3,16 +3,30 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/jfrog/jfrog-jars"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.2'
-
+        classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+        classpath 'com.github.ben-manes:gradle-versions-plugin:+'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+ext{
+    COMPILE_SDK=22
+    TARGET_SDK=22
+    BUILD_TOOL="22.0.1"
+
+    VERSION="1.0.3"
+
+    PLAY_SERVICES_VERSION="7.5.0"
+    SUPPORT_VERSION="22.2.0"
 }
 
 allprojects {
