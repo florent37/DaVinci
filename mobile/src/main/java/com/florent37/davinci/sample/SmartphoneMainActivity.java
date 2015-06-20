@@ -2,9 +2,10 @@ package com.florent37.davinci.sample;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 
-public class SmartphoneMainActivity extends ActionBarActivity {
+public class SmartphoneMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

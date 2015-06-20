@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
+apply plugin: 'com.github.ben-manes.versions'
 
 version = project.VERSION
 
@@ -24,7 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.gms:play-services:'+project.PLAY_SERVICES_VERSION
 }
 
