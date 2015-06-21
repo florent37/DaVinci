@@ -11,7 +11,7 @@ DaVinci is an image downloading and caching library for Android Wear
 Usage
 --------
 
-And use it wherever you want
+Use DaVinci from your SmartWatch app
 ```java
 DaVinci.with(context).load("/image/0").into(imageView);
 DaVinci.with(context).load("http://i.imgur.com/o3ELrbX.jpg").into(imageView);
