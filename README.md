@@ -8,30 +8,8 @@ DaVinci
 
 DaVinci is an image downloading and caching library for Android Wear
 
-Download
---------
-
-In your wear module [![Download](https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg)](https://bintray.com/florent37/maven/DaVinci/_latestVersion)
-```groovy
-compile ('com.github.florent37:davinci:1.0.3@aar'){
-    transitive = true
-}
-```
-
-In your smartphone module  [![Download](https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg)](https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion)
-```groovy
-compile ('com.github.florent37:davincidaemon:1.0.3@aar'){
-     transitive = true
-}
-```
-
 Usage
 --------
-
-Don't forget to add WRITE_EXTERNAL_STORAGE in your Wear AndroidManifest.xml
-```xml
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-```
 
 And use it wherever you want
 ```java
@@ -141,6 +119,28 @@ DaVinci.with(context).load(url).transform(new BlurTransformation()).into(imageVi
 **Resizing**
 ```java
 DaVinci.with(context).load(url).transform(new ResizeTransformation(maxWidth)).into(imageView);
+```
+
+Download
+--------
+
+In your wear module [![Download](https://api.bintray.com/packages/florent37/maven/DaVinci/images/download.svg)](https://bintray.com/florent37/maven/DaVinci/_latestVersion)
+```groovy
+compile ('com.github.florent37:davinci:1.0.3@aar'){
+    transitive = true
+}
+```
+
+In your smartphone module  [![Download](https://api.bintray.com/packages/florent37/maven/DaVinciDaemon/images/download.svg)](https://bintray.com/florent37/maven/DaVinciDaemon/_latestVersion)
+```groovy
+compile ('com.github.florent37:davincidaemon:1.0.3@aar'){
+     transitive = true
+}
+```
+
+Don't forget to add WRITE_EXTERNAL_STORAGE in your Wear AndroidManifest.xml
+```xml
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
 TODO
